@@ -1,10 +1,10 @@
 interface INode {
-  Name: string;
-  FullDestination: string;
-  IsIterable: boolean;
-  IsDirectory: boolean;
-  Content: INode[] | null;
-  IsVisited: boolean;
+  name: string;
+  fullDestination: string;
+  isIterable: boolean;
+  isDirectory: boolean;
+  content: INode[] | null;
+  isVisited: boolean;
 }
 
 export default INode;

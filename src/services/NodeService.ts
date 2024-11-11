@@ -14,22 +14,22 @@ const createNode = async (
     : false;
 
   return {
-    Name: fileName,
-    FullDestination: fullPath,
-    IsDirectory: isDirectory,
-    IsIterable: isIterable,
-    Content: null,
-    IsVisited: false,
+    name: fileName,
+    fullDestination: fullPath,
+    isDirectory: isDirectory,
+    isIterable: isIterable,
+    content: null,
+    isVisited: false,
   };
 };
 
 const traverseNodes = async (nodes: INode[]): Promise<void> => {
   for (const node of nodes) {
-    if (node.IsIterable && !node.IsVisited) {
-      node.IsVisited = true;
-      node.Content = await readDirectory(node.FullDestination);
-      if (node.Content) {
-        await traverseNodes(node.Content);
+    if (node.isIterable && !node.isVisited) {
+      node.isVisited = true;
+      node.content = await readDirectory(node.fullDestination);
+      if (node.content) {
+        await traverseNodes(node.content);
       }
     }
   }
