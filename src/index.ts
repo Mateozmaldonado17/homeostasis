@@ -9,9 +9,6 @@ async function main(dest: string): Promise<void> {
     if (await existsInDirectory(dest) === false) {
       throw new Error("We couldn't find the main descriptor file in this project");
     }
-
-    await readDirectory(dest);
-
     const rootNode: INode[] = await readDirectory(dest);
     await traverseNodes(rootNode);
 

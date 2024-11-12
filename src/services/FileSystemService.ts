@@ -11,7 +11,7 @@ const readDirectory = async (directory: string): Promise<INode[]> => {
   const nodes = await Promise.all(
     files.map((file) => createNode(file, directory))
   );
-  return nodes;
+  return nodes.filter((node): node is INode => node !== null);
 };
 
 export { getStats, readDirectory };
