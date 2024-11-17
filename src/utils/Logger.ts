@@ -1,5 +1,9 @@
 const error = (message: string): void => {
-  console.error("Error:", message);
+  console.log(
+    `%c[Homeostasis]`,
+    "color: red; font-weight: bold;",
+    message
+  );
 };
 
 export { error };
