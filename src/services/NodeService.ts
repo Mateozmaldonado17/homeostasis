@@ -1,4 +1,5 @@
-import { INode } from "../models/";
+import * as fs from "fs";
+import { IDescriptor, INode } from "../models/";
 import { existsInDirectory } from "./DescriptorService";
 import { getStats, readDirectory } from "./FileSystemService";
 import * as Logger from "../utils/Logger";
@@ -14,6 +15,9 @@ const createNode = async (
     const isIterable = isDirectory
       ? await existsInDirectory(fullPath)
       : false;
+    
+    const rawData = fs.readFileSync(`${directory}/descriptor.json`, 'utf8');
+    const data: IDescriptor = JSON.parse(rawData);
 
     return {
       name: fileName,
@@ -22,7 +26,9 @@ const createNode = async (
       isIterable: isIterable,
       content: null,
       isVisited: false,
+      contentSettings: isIterable ? data : null
     };    
+
   } catch (error: any) {
     Logger.error(error.message)
   }

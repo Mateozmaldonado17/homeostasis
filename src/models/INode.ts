@@ -1,3 +1,5 @@
+import IDescriptor from "./IDescriptor";
+
 interface INode {
   name: string;
   fullDestination: string;
@@ -5,6 +7,7 @@ interface INode {
   isDirectory: boolean;
   content: INode[] | null;
   isVisited: boolean;
+  contentSettings: IDescriptor | null
 }
 
 export default INode;
