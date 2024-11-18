@@ -1,6 +1,6 @@
 const error = (message: string): void => {
   console.log(
-    `%c[Homeostasis]`,
+    `%c-`,
     "color: red; font-weight: bold;",
     message
   );

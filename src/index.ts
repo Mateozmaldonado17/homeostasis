@@ -9,7 +9,6 @@ import { traverseNodes } from "./services/NodeService";
 import * as Logger from "./utils/Logger";
 
 type INodeCompact = Pick<INode, "content" | "contentSettings">;
-
 interface IError {
   fullpath: string;
   name: string;
@@ -42,13 +41,43 @@ const strictContentValidation = (
   })
 };
 
-const runValidations = async (mainNode: INodeCompact) => {
+const contentValidation = (contents: INode[], contentSetting: IDescriptor) => {
+  ["files", "directories"].forEach((type) => {
+    const isDirectoryOrFile = type === "directories" ? "directory" : "file";
+    const descriptorContent = contentSetting?.[type].content.map((content) => {
+      return content.name;
+    })
+    const mappedContent = contents.map((content: INode) => {
+      const isDirectory = type === "files" && !content.isDirectory;
+      const isFile = type === "directories" && content.isDirectory;
+      if (isDirectory || isFile) {
+        return content;
+      }
+    });
+    const filteredMappedContent = mappedContent.filter(value => value !== undefined);
+    
+    descriptorContent.forEach((content) => {
+      const includeContentInMappedContent = filteredMappedContent.some(node => node.name === content);
+      if (!includeContentInMappedContent) {
+        const error: IError = {
+          errorMessage: `The ${isDirectoryOrFile} "${content}" is essential in the path ... This file is listed in the contents of ${descriptorFile}`,
+          fullpath: "test",
+          name: content,
+        };
+        errors.push(error);
+      }
+    })
+  })
+  
+}
+
+const runValidations = async (mainNode: INodeCompact): Promise<void> => {
   const contents = mainNode.content as INode[];
   const contentSetting = mainNode.contentSettings;
-
   for (const content of contents) {
     strictContentValidation(contentSetting as IDescriptor, content);
   }
+  contentValidation(contents, contentSetting as IDescriptor)
 };
 
 async function main(dest: string): Promise<void> {
@@ -71,7 +100,7 @@ async function main(dest: string): Promise<void> {
 
     await runValidations(rootNodeRefactored);
 
-    if (errors.length) throw new Error(`⚠ ${errors.length} errors found`);
+    if (errors.length) throw new Error(`[Homeostasis] ⚠ ${errors.length} errors found`);
 
   } catch (error: any) {
     console.log(error.message);
