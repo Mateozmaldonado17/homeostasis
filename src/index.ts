@@ -100,7 +100,8 @@ async function main(dest: string): Promise<void> {
 
     await runValidations(rootNodeRefactored);
 
-    if (errors.length) throw new Error(`[Homeostasis] ⚠ ${errors.length} errors found`);
+    console.log("[Homeostasis]")
+    if (errors.length) throw new Error(`⚠ ${errors.length} errors found`);
     if (!errors.length) console.log("✅ errors not found")
   } catch (error: any) {
     console.log(error.message);
