@@ -10,6 +10,7 @@ import * as Logger from "./utils/Logger";
 import IError from "./models/IError";
 import {
   contentValidation,
+  conventionValidation,
   strictContentValidation,
 } from "./services/ValidationService";
 
@@ -37,6 +38,13 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   );
   if (contentValidationResult.errors.length)
     globalErrors.push(...contentValidationResult.errors);
+
+  const conventionValidationResult = conventionValidation(
+    contents,
+    contentSetting as IDescriptor
+  );
+  if (conventionValidationResult.errors.length)
+    globalErrors.push(...conventionValidationResult.errors);
 };
 
 async function main(dest: string): Promise<void> {
