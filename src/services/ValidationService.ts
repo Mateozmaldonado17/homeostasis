@@ -55,6 +55,7 @@ const contentValidation = (
     );
 
     descriptorContent?.forEach((content) => {
+      if (ignoredFiles?.includes(content)) return;
       const includeContentInMappedContent = filteredMappedContent.some(
         (node) => node.name === content
       );

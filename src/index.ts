@@ -22,14 +22,22 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   const fullDestination = mainNode.fullDestination;
 
   const contentSetting = mainNode.contentSettings;
+
   for (const content of contents) {
+    const ignoreDirectories = contentSetting?.directories.ignore;
+    const ignoreFiles = contentSetting?.files.ignore;
+
+    const thisFileOrDirShouldBeIgnore =
+      ignoreDirectories?.includes(content.name) ||
+      ignoreFiles?.includes(content.name);
+
     const strictContentResult = strictContentValidation(
       contentSetting as IDescriptor,
       content
     );
     if (strictContentResult.errors.length)
       globalErrors.push(...strictContentResult.errors);
-    if (content.isIterable) {
+    if (content.isIterable && !thisFileOrDirShouldBeIgnore) {
       runValidations(content as Partial<INode>);
     }
   }
