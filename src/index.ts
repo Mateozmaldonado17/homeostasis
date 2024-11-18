@@ -18,7 +18,9 @@ const globalErrors: IError[] = [];
 
 const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   const contents = mainNode.content as INode[];
+
   const fullDestination = mainNode.fullDestination;
+
   const contentSetting = mainNode.contentSettings;
   for (const content of contents) {
     const strictContentResult = strictContentValidation(
@@ -63,6 +65,7 @@ async function main(dest: string): Promise<void> {
     const rootNodeRefactored: Partial<INode> = {
       content: rootNode,
       contentSettings: data,
+      fullDestination: dest,
     };
     await runValidations(rootNodeRefactored);
 

@@ -56,7 +56,7 @@ const contentValidation = (
       );
       if (!includeContentInMappedContent) {
         const error: IError = {
-          errorMessage: `The ${isDirectoryOrFile} "${root}" (${content}) is essential in the path ${content}.`,
+          errorMessage: `The ${isDirectoryOrFile} "${root}" (${content}) is essential in the source.`,
           fullpath: root,
           name: content,
         };
