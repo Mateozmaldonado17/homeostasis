@@ -8,7 +8,6 @@ import { readDirectory } from "./services/FileSystemService";
 import { traverseNodes } from "./services/NodeService";
 import * as Logger from "./utils/Logger";
 
-type INodeCompact = Pick<INode, "content" | "contentSettings">;
 interface IError {
   fullpath: string;
   name: string;
@@ -60,7 +59,7 @@ const contentValidation = (contents: INode[], contentSetting: IDescriptor) => {
       const includeContentInMappedContent = filteredMappedContent.some(node => node.name === content);
       if (!includeContentInMappedContent) {
         const error: IError = {
-          errorMessage: `The ${isDirectoryOrFile} "${content}" is essential in the path ... This file is listed in the contents of ${descriptorFile}`,
+          errorMessage: `The ${isDirectoryOrFile} "${content}" is essential in the path ${content} This file is listed in the contents of ${descriptorFile}`,
           fullpath: "test",
           name: content,
         };
@@ -71,11 +70,15 @@ const contentValidation = (contents: INode[], contentSetting: IDescriptor) => {
   
 }
 
-const runValidations = async (mainNode: INodeCompact): Promise<void> => {
+const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   const contents = mainNode.content as INode[];
   const contentSetting = mainNode.contentSettings;
   for (const content of contents) {
     strictContentValidation(contentSetting as IDescriptor, content);
+    if (content.isIterable) {
+      //console.log(content);
+      runValidations(content as Partial<INode>)
+    }
   }
   contentValidation(contents, contentSetting as IDescriptor)
 };
@@ -93,11 +96,10 @@ async function main(dest: string): Promise<void> {
     const rawData = fs.readFileSync(`${dest}/${descriptorFile}`, "utf8");
     const data: IDescriptor = JSON.parse(rawData);
 
-    const rootNodeRefactored: INodeCompact = {
+    const rootNodeRefactored: Partial<INode> = {
       content: rootNode,
       contentSettings: data,
     };
-
     await runValidations(rootNodeRefactored);
 
     console.log("[Homeostasis]")

@@ -15,19 +15,24 @@ const createNode = async (
     const isIterable = isDirectory
       ? await existsInDirectory(fullPath)
       : false;
-    
-    const rawData = fs.readFileSync(`${directory}/${descriptorFile}`, 'utf8');
-    const data: IDescriptor = JSON.parse(rawData);
 
-    return {
+    const nodeComplete = {
       name: fileName,
       fullDestination: fullPath,
       isDirectory: isDirectory,
       isIterable: isIterable,
       content: null,
       isVisited: false,
-      contentSettings: isIterable ? data : null
-    };    
+      contentSettings: {} as IDescriptor
+    };   
+
+    if (isDirectory && isIterable) {
+      const rawData = fs.readFileSync(`${fullPath}/${descriptorFile}`, 'utf8');
+      const descriptorData: IDescriptor = JSON.parse(rawData);     
+      nodeComplete.contentSettings = descriptorData as IDescriptor;
+    }
+
+    return nodeComplete;
 
   } catch (error: any) {
     Logger.error(error.message)
