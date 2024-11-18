@@ -4,7 +4,7 @@ export enum ConventionList {
   CamelCase = "camel-case",
   PascalCase = "pascal-case",
   SnakeCase = "snake-case",
-  KebabCase = "KebabCase",
+  KebabCase = "kebab-case",
 }
 
 export interface IDescriptorItem {

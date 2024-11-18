@@ -2,6 +2,7 @@ import { IDescriptor, INode } from "../models";
 import { ConventionList } from "../models/IDescriptor";
 import IError from "../models/IError";
 import { isCamelCase, toCamelCase } from "../utils/CamelCase";
+import { isKebabCase, toKebabCase } from "../utils/KebabCase";
 import { isPascalCase, toPascalCase } from "../utils/PascalCase";
 import { isSnakeCase, toSnakeCase } from "../utils/SnakeCase";
 import { descriptorFile } from "./DescriptorService";
@@ -121,6 +122,20 @@ const conventionValidation = (
             errorMessage: `The ${isDirectoryOrFile} "${
               content.fullDestination
             }" (${content.name}) is not pascal-case, should be (${toSnakeCase(
+              content.name
+            )})`,
+            fullpath: content.fullDestination,
+            name: content.name,
+          };
+          errors.push(error);
+        }
+      }
+      if (conventionFormat === ConventionList.KebabCase) {
+        if (!isKebabCase(content.name)) {
+          const error: IError = {
+            errorMessage: `The ${isDirectoryOrFile} "${
+              content.fullDestination
+            }" (${content.name}) is not pascal-case, should be (${toKebabCase(
               content.name
             )})`,
             fullpath: content.fullDestination,
