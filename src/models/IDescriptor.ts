@@ -7,11 +7,6 @@ enum ConventionList {
   KebabCase = "KebabCase",
 }
 
-enum WatchList {
-  Eager = "Eager",
-  Lazy = "Lazy",
-}
-
 export interface IDescriptorItem {
   convention: ConventionList[];
   strict_content: boolean;
