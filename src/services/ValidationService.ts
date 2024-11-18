@@ -18,7 +18,7 @@ const strictContentValidation = (descriptor: IDescriptor, content: INode) => {
     const fileNames = staticContent.map((typeFile) => typeFile.name);
     if (!fileNames.includes(content.name) && isStrictContent) {
       const error: IError = {
-        errorMessage: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
+        errorMessage: `The ${isDirectoryOrFile} "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
         fullpath: content.fullDestination,
         name: content.name,
       };
@@ -42,8 +42,8 @@ const contentValidation = (
       return content.name;
     });
     const mappedContent = contents.map((content: INode) => {
-      const isDirectory = type === "files" && !content.isDirectory;
-      const isFile = type === "directories" && content.isDirectory;
+      const isFile = type === "files" && !content.isDirectory;
+      const isDirectory = type === "directories" && content.isDirectory;
       if (isDirectory || isFile) return content;
     });
     const filteredMappedContent = mappedContent.filter(
@@ -78,8 +78,8 @@ const conventionValidation = (
     const isDirectoryOrFile = type === "directories" ? "directory" : "file";
     const conventionFormat = contentSetting?.[type].convention;
     const mappedContent = contents.map((content: INode) => {
-      const isDirectory = type === "files" && !content.isDirectory;
-      const isFile = type === "directories" && content.isDirectory;
+      const isFile = type === "files" && !content.isDirectory;
+      const isDirectory = type === "directories" && content.isDirectory;
       if (isDirectory || isFile) return content;
     });
     const filteredMappedContent = mappedContent.filter(
