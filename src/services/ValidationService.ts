@@ -13,6 +13,8 @@ const strictContentValidation = (descriptor: IDescriptor, content: INode) => {
     if (type === "files" && content.isDirectory) return false;
     if (type === "directories" && !content.isDirectory) return false;
     const isDirectoryOrFile = type === "directories" ? "directory" : "file";
+    const ignoredFiles = descriptor?.[type].ignore;
+    if (ignoredFiles?.includes(content.name)) return;
     const staticContent = descriptor?.[type].content;
     const isStrictContent = descriptor?.[type].strict_content;
     const fileNames = staticContent?.map((typeFile) => typeFile.name);
@@ -38,10 +40,12 @@ const contentValidation = (
   const errors: IError[] = [];
   ["files", "directories"].forEach((type) => {
     const isDirectoryOrFile = type === "directories" ? "directory" : "file";
+    const ignoredFiles = contentSetting?.[type].ignore;
     const descriptorContent = contentSetting?.[type].content?.map((content) => {
       return content.name;
     });
     const mappedContent = contents.map((content: INode) => {
+      if (ignoredFiles?.includes(content.name)) return;
       const isFile = type === "files" && !content.isDirectory;
       const isDirectory = type === "directories" && content.isDirectory;
       if (isDirectory || isFile) return content;
@@ -76,8 +80,10 @@ const conventionValidation = (
   const errors: IError[] = [];
   ["files", "directories"].forEach((type) => {
     const isDirectoryOrFile = type === "directories" ? "directory" : "file";
+    const ignoredFiles = contentSetting?.[type].ignore;
     const conventionFormat = contentSetting?.[type].convention;
     const mappedContent = contents.map((content: INode) => {
+      if (ignoredFiles?.includes(content.name)) return;
       const isFile = type === "files" && !content.isDirectory;
       const isDirectory = type === "directories" && content.isDirectory;
       if (isDirectory || isFile) return content;
