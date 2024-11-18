@@ -3,7 +3,7 @@ import IContent from "./IContent";
 export enum ConventionList {
   CamelCase = "camel-case",
   PascalCase = "pascal-case",
-  SnakeCase = "SnakeCase",
+  SnakeCase = "snake-case",
   KebabCase = "KebabCase",
 }
 
