@@ -99,6 +99,8 @@ const conventionValidation = (
           };
           errors.push(error);
         }
+      }
+      if (conventionFormat === ConventionList.PascalCase) {
         if (!isPascalCase(content.name)) {
           const error: IError = {
             errorMessage: `The ${isDirectoryOrFile} "${
