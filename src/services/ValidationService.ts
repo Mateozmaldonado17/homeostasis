@@ -1,7 +1,8 @@
 import { IDescriptor, INode } from "../models";
 import { ConventionList } from "../models/IDescriptor";
 import IError from "../models/IError";
-import { isCamelCase } from "../utils/CamelCase";
+import { isCamelCase, toCamelCase } from "../utils/CamelCase";
+import { isPascalCase, toPascalCase } from "../utils/PascalCase";
 import { descriptorFile } from "./DescriptorService";
 
 const strictContentValidation = (descriptor: IDescriptor, content: INode) => {
@@ -84,10 +85,27 @@ const conventionValidation = (
     );
 
     filteredMappedContent.forEach((content) => {
+      if (content.name === descriptorFile) return false;
       if (conventionFormat === ConventionList.CamelCase) {
         if (!isCamelCase(content.name)) {
           const error: IError = {
-            errorMessage: `The ${isDirectoryOrFile} "${content.fullDestination}" (${content.name}) is not camel-case.`,
+            errorMessage: `The ${isDirectoryOrFile} "${
+              content.fullDestination
+            }" (${content.name}) is not camel-case, should be (${toCamelCase(
+              content.name
+            )})`,
+            fullpath: content.fullDestination,
+            name: content.name,
+          };
+          errors.push(error);
+        }
+        if (!isPascalCase(content.name)) {
+          const error: IError = {
+            errorMessage: `The ${isDirectoryOrFile} "${
+              content.fullDestination
+            }" (${content.name}) is not pascal-case, should be (${toPascalCase(
+              content.name
+            )})`,
             fullpath: content.fullDestination,
             name: content.name,
           };
