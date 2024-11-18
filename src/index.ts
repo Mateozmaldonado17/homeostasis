@@ -8,22 +8,35 @@ import { readDirectory } from "./services/FileSystemService";
 import { traverseNodes } from "./services/NodeService";
 import * as Logger from "./utils/Logger";
 import IError from "./models/IError";
-import { contentValidation, strictContentValidation } from "./services/ValidationService";
+import {
+  contentValidation,
+  strictContentValidation,
+} from "./services/ValidationService";
 
 const globalErrors: IError[] = [];
 
 const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   const contents = mainNode.content as INode[];
+  const fullDestination = mainNode.fullDestination;
   const contentSetting = mainNode.contentSettings;
   for (const content of contents) {
-    const strictContentResult = strictContentValidation(contentSetting as IDescriptor, content);
-    if (strictContentResult.errors.length) globalErrors.push(...strictContentResult.errors);
+    const strictContentResult = strictContentValidation(
+      contentSetting as IDescriptor,
+      content
+    );
+    if (strictContentResult.errors.length)
+      globalErrors.push(...strictContentResult.errors);
     if (content.isIterable) {
-      runValidations(content as Partial<INode>)
+      runValidations(content as Partial<INode>);
     }
   }
-  const contentValidationResult = contentValidation(contents, contentSetting as IDescriptor)
-  if (contentValidationResult.errors.length) globalErrors.push(...contentValidationResult.errors);
+  const contentValidationResult = contentValidation(
+    contents,
+    contentSetting as IDescriptor,
+    fullDestination as string
+  );
+  if (contentValidationResult.errors.length)
+    globalErrors.push(...contentValidationResult.errors);
 };
 
 async function main(dest: string): Promise<void> {
@@ -45,14 +58,15 @@ async function main(dest: string): Promise<void> {
     };
     await runValidations(rootNodeRefactored);
 
-    console.log("[Homeostasis]")
-    if (globalErrors.length) throw new Error(`⚠ ${globalErrors.length} errors found`);
-    if (!globalErrors.length) console.log("✅ errors not found")
+    console.log("[Homeostasis]");
+    if (globalErrors.length)
+      throw new Error(`⚠ ${globalErrors.length} errors found`);
+    if (!globalErrors.length) console.log("✅ errors not found");
   } catch (error: any) {
     console.log(error.message);
     globalErrors.map((error: IError) => {
       Logger.error(error.errorMessage);
-    })
+    });
   }
 }
 

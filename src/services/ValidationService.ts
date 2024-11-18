@@ -13,7 +13,7 @@ const strictContentValidation = (descriptor: IDescriptor, content: INode) => {
     const fileNames = staticContent.map((typeFile) => typeFile.name);
     if (!fileNames.includes(content.name) && isStrictContent) {
       const error: IError = {
-        errorMessage: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode. This file is not listed in the contents of ${descriptorFile}`,
+        errorMessage: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
         fullpath: content.fullDestination,
         name: content.name,
       };
@@ -25,7 +25,7 @@ const strictContentValidation = (descriptor: IDescriptor, content: INode) => {
   };
 };
 
-const contentValidation = (contents: INode[], contentSetting: IDescriptor) => {
+const contentValidation = (contents: INode[], contentSetting: IDescriptor, root: string) => {
   const errors: IError[] = [];
   ["files", "directories"].forEach((type) => {
     const isDirectoryOrFile = type === "directories" ? "directory" : "file";
@@ -43,13 +43,13 @@ const contentValidation = (contents: INode[], contentSetting: IDescriptor) => {
       (value) => value !== undefined
     );
 
-    descriptorContent.forEach((content) => {
+      descriptorContent.forEach((content) => {
       const includeContentInMappedContent = filteredMappedContent.some(
         (node) => node.name === content
       );
       if (!includeContentInMappedContent) {
         const error: IError = {
-          errorMessage: `The ${isDirectoryOrFile} "${content}" is essential in the path ${content} This file is listed in the contents of ${descriptorFile}`,
+          errorMessage: `The ${isDirectoryOrFile} "${root}" (${content}) is essential in the path ${content}.`,
           fullpath: "test",
           name: content,
         };
