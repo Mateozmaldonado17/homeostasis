@@ -71,9 +71,13 @@ async function main(dest: string): Promise<void> {
 
     await runValidations(rootNodeRefactored);
 
-    console.log(errors);
+    if (errors.length) throw new Error(`⚠ ${errors.length} errors found`);
+
   } catch (error: any) {
-    Logger.error(error.message);
+    console.log(error.message);
+    errors.map((error: IError) => {
+      Logger.error(error.errorMessage);
+    })
   }
 }
 
