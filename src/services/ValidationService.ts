@@ -15,8 +15,8 @@ const strictContentValidation = (descriptor: IDescriptor, content: INode) => {
     const isDirectoryOrFile = type === "directories" ? "directory" : "file";
     const staticContent = descriptor?.[type].content;
     const isStrictContent = descriptor?.[type].strict_content;
-    const fileNames = staticContent.map((typeFile) => typeFile.name);
-    if (!fileNames.includes(content.name) && isStrictContent) {
+    const fileNames = staticContent?.map((typeFile) => typeFile.name);
+    if (!fileNames?.includes(content.name) && isStrictContent) {
       const error: IError = {
         errorMessage: `The ${isDirectoryOrFile} "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
         fullpath: content.fullDestination,
@@ -38,7 +38,7 @@ const contentValidation = (
   const errors: IError[] = [];
   ["files", "directories"].forEach((type) => {
     const isDirectoryOrFile = type === "directories" ? "directory" : "file";
-    const descriptorContent = contentSetting?.[type].content.map((content) => {
+    const descriptorContent = contentSetting?.[type].content?.map((content) => {
       return content.name;
     });
     const mappedContent = contents.map((content: INode) => {
@@ -50,7 +50,7 @@ const contentValidation = (
       (value) => value !== undefined
     );
 
-    descriptorContent.forEach((content) => {
+    descriptorContent?.forEach((content) => {
       const includeContentInMappedContent = filteredMappedContent.some(
         (node) => node.name === content
       );
