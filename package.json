@@ -1,6 +1,6 @@
 {
   "name": "homeostasis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Library for keep entriopy under control",
   "main": "dist/index.js",
   "scripts": {
