@@ -18,6 +18,7 @@ HomeostasisJS resuelve estos problemas permitiéndote definir desde el principio
 1. **Instala globalmente la libreria**
   ```bash
   npm install -g homeostasis
+  ```
 
 2. **Crea un archivo descriptor:**  
    En cada carpeta que desees controlar, agrega un archivo `descriptor.json` con la configuración específica. Ejemplo:
@@ -87,3 +88,4 @@ Convenciones soportadas: `camel-case`, `snake-case`, `kebab-case`, `pascal-case`
   
   ```bash
   homeostasis ./path/to/your/project
+  ```
