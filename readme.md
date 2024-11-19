@@ -23,6 +23,7 @@ HomeostasisJS resuelve estos problemas permitiéndote definir desde el principio
   "directories": {
     "strict_content": false,
     "convention": "kebab-case",
+    "ignore": ["__mocks__"],
     "content": [
       {
         "name": "components",
@@ -61,7 +62,8 @@ HomeostasisJS resuelve estos problemas permitiéndote definir desde el principio
   "files": {
     "convention": "kebab-case",
     "strict_content": false,
-    "limit": 2,
+    "ignore": ["file.js"],
+    "allowedFormats": [".js", ".ts"],
     "content": [
       {
         "name": "index.ts",
