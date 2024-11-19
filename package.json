@@ -1,8 +1,11 @@
 {
   "name": "homeostasis",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Library for keep entriopy under control",
   "main": "dist/index.js",
+  "bin": {
+    "homeostasis": "./dist/index.js"
+  },
   "scripts": {
     "start:dev": "ts-node-dev src/index.ts",
     "start": "ts-node src/index.ts",
