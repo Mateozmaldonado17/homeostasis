@@ -11,6 +11,7 @@ import IError from "./models/IError";
 import {
   contentValidation,
   conventionValidation,
+  formatValidation,
   strictContentValidation,
 } from "./services/ValidationService";
 
@@ -55,6 +56,13 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   );
   if (conventionValidationResult.errors.length)
     globalErrors.push(...conventionValidationResult.errors);
+
+  const formatValidationResult = formatValidation(
+    contents,
+    contentSetting as IDescriptor
+  );
+  if (formatValidationResult.errors.length)
+    globalErrors.push(...formatValidationResult.errors);
 };
 
 async function main(dest: string): Promise<void> {
