@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+"use strict";
 import * as fs from "fs";
 import { IDescriptor, INode } from "./models";
 import {
