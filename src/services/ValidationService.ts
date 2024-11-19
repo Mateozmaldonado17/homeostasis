@@ -129,7 +129,7 @@ const conventionValidation = (
           const error: IError = {
             errorMessage: `The ${isDirectoryOrFile} in "${
               content.fullDestination
-            }" (${content.name}) is not pascal-case, should be (${toSnakeCase(
+            }" (${content.name}) is not snake-case, should be (${toSnakeCase(
               content.name
             )})`,
             fullpath: content.fullDestination,
@@ -143,7 +143,7 @@ const conventionValidation = (
           const error: IError = {
             errorMessage: `The ${isDirectoryOrFile} in "${
               content.fullDestination
-            }" (${content.name}) is not pascal-case, should be (${toKebabCase(
+            }" (${content.name}) is not kebab-case, should be (${toKebabCase(
               content.name
             )})`,
             fullpath: content.fullDestination,
