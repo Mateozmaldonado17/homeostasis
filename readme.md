@@ -15,7 +15,11 @@ A medida que los proyectos crecen, es común que la estructura se vuelva caótic
 
 HomeostasisJS resuelve estos problemas permitiéndote definir desde el principio las convenciones de tu proyecto y asegurando que estas se respeten automáticamente. Esto permite que haya **feedback negativo** en nuestros proyectos, reduciendo la entropía y promoviendo una estructura más ordenada y consistente.
 
-1. **Crea un archivo descriptor:**  
+1. **Instala globalmente la libreria**
+  ```bash
+  npm install -g homeostasis
+
+2. **Crea un archivo descriptor:**  
    En cada carpeta que desees controlar, agrega un archivo `descriptor.json` con la configuración específica. Ejemplo:
 
 ```json
@@ -78,3 +82,8 @@ HomeostasisJS resuelve estos problemas permitiéndote definir desde el principio
 - **`files`:** Reglas para archivos, incluyendo límite de archivos y contenido esperado.
 
 Convenciones soportadas: `camel-case`, `snake-case`, `kebab-case`, `pascal-case`.
+
+3. **Ejecuta Homeostasis**
+  
+  ```bash
+  homeostasis ./path/to/your/project
