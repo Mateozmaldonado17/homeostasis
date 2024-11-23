@@ -15,14 +15,14 @@ interface IBase {
 }
 
 const defaultBaseToRun: FileTypeArray = ["files", "directories"];
-interface ICallbackProps {
+interface IRunningBaseCallback {
   currentType: string;
   isDirectoryOrFile: string;
 }
 
 const runningBase = (
   props: IBase,
-  callback: (returnProps: ICallbackProps) => void
+  callback: (returnProps: IRunningBaseCallback) => void
 ): void => {
   const { fileType } = props;
   fileType.forEach((currentType: string) => {
@@ -52,15 +52,20 @@ interface IRunningFilesCallback {
 const runningFiles = (props: IRunnigFilesProps, callback: (props: IRunningFilesCallback) => void): void => {
   const { contents, contentSetting, currentType } = props;
   const ignoredFiles: string[] = contentSetting?.files.ignore;
-  contents.forEach((content: INode) => {
+  const ignoredDirectories = contentSetting?.directories.ignore;
 
+  contents.forEach((content: INode) => {
+    const thisFileOrDirShouldBeIgnore =
+    ignoredDirectories?.includes(content.name) ||
+      ignoredFiles?.includes(content.name);
+    
     const staticContent = contentSetting?.[currentType].content;
     const isStrictContent = contentSetting?.[currentType].strict_content;
     const fileNames = staticContent?.map((typeFile) => typeFile.name);
 
     if (currentType === "files" && content.isDirectory) return false;
     if (currentType === "directories" && !content.isDirectory) return false;
-    if (ignoredFiles?.includes(content.name)) return false;
+    if (thisFileOrDirShouldBeIgnore) return false;
 
     const callbackProps: IRunningFilesCallback = {
       content,
@@ -81,7 +86,7 @@ const strictContentValidation = (
 ) => {
   const errors: IError[] = [];
   const configRunningBase = { fileType: defaultBaseToRun };
-  const runningBaseCallback = (returnProps: ICallbackProps) => {
+  const runningBaseCallback = (returnProps: IRunningBaseCallback) => {
     const { isDirectoryOrFile, currentType } = returnProps;
     const runningFilesProps: IRunnigFilesProps = {
       contents,
@@ -89,7 +94,7 @@ const strictContentValidation = (
       currentType
     }
     const runningFilesCallback = (filesProps: IRunningFilesCallback) => {
-      const { content, ignoredFiles, fileNames, isStrictContent, staticContent } = filesProps;
+      const { content, fileNames, isStrictContent } = filesProps;
       if (!fileNames?.includes(content.name) && isStrictContent) {
         const error: IError = {
           errorMessage: `[] The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
