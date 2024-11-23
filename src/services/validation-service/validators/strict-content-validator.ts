@@ -5,8 +5,7 @@ import {
   IProcessFileTypeProps,
   IProcessNodesCallback,
 } from "../models/ValidationTypes";
-import processFileTypes from "../process-file-types";
-import processNodes from "../process-nodes";
+import { processFileTypes, processNodes } from "../processors";
 
 const strictContentValidator = (
   contentSetting: IDescriptor,

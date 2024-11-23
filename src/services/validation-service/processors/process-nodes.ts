@@ -1,8 +1,8 @@
-import { INode } from "../../models";
+import { INode } from "../../../models";
 import {
   IProcessFileTypeProps,
   IProcessNodesCallback,
-} from "./models/ValidationTypes";
+} from "../models/ValidationTypes";
 
 const processNodes = (
   props: IProcessFileTypeProps,

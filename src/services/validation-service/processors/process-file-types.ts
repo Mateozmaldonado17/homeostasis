@@ -1,4 +1,4 @@
-import { IBase, IProcessFileCallback } from "./models/ValidationTypes";
+import { IBase, IProcessFileCallback } from "../models/ValidationTypes";
 
 const processFileTypes = (
   props: IBase,
