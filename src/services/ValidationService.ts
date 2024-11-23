@@ -8,117 +8,6 @@ import { isPascalCase, toPascalCase } from "../utils/PascalCase";
 import { isSnakeCase, toSnakeCase } from "../utils/SnakeCase";
 import { descriptorFile } from "./DescriptorService";
 
-type FileTypeArray = ("files" | "directories")[];
-
-interface IBase {
-  fileType: FileTypeArray;
-}
-
-const defaultBaseToRun: FileTypeArray = ["files", "directories"];
-interface IProcessFileCallback {
-  currentType: string;
-  isDirectoryOrFile: string;
-}
-
-interface IProcessFileTypeProps {
-  contents: INode[]
-  contentSetting: IDescriptor,
-  currentType: string 
-}
-
-interface IProcessNodesCallback {
-  content: INode,
-  ignoredFiles: string[],
-  staticContent: IContent[] | undefined,
-  isStrictContent: boolean | undefined,
-  fileNames: string[] | undefined
-}
-
-
-const processFileTypes = (
-  props: IBase,
-  callback: (returnProps: IProcessFileCallback) => void
-): void => {
-  const { fileType } = props;
-  fileType.forEach((currentType: string) => {
-    const isDirectoryOrFile =
-      currentType === "directories" ? "directory" : "file";
-    callback({
-      currentType,
-      isDirectoryOrFile,
-    });
-  });
-};
-
-const processNodes = (props: IProcessFileTypeProps, callback: (props: IProcessNodesCallback) => void): void => {
-  const { contents, contentSetting, currentType } = props;
-  const ignoredFiles: string[] = contentSetting?.files.ignore;
-  const ignoredDirectories = contentSetting?.directories.ignore;
-
-  contents.forEach((content: INode) => {
-    const thisFileOrDirShouldBeIgnore =
-    ignoredDirectories?.includes(content.name) ||
-      ignoredFiles?.includes(content.name);
-    
-    const staticContent = contentSetting?.[currentType].content;
-    const isStrictContent = contentSetting?.[currentType].strict_content;
-    const fileNames = staticContent?.map((typeFile) => typeFile.name);
-
-    if (currentType === "files" && content.isDirectory) return false;
-    if (currentType === "directories" && !content.isDirectory) return false;
-    if (thisFileOrDirShouldBeIgnore) return false;
-
-    const callbackProps: IProcessNodesCallback = {
-      content,
-      ignoredFiles,
-      staticContent,
-      isStrictContent,
-      fileNames
-    };
-
-    callback(callbackProps)
-  })
-}
-
-
-const strictContentValidation = (
-  contentSetting: IDescriptor,
-  contents: INode[]
-) => {
-  const errors: IError[] = [];
-  const configRunningBase = { fileType: defaultBaseToRun };
-  const processFileTypesCallback = (returnProps: IProcessFileCallback) => {
-    const { isDirectoryOrFile, currentType } = returnProps;
-
-    const processNodesProps: IProcessFileTypeProps = {
-      contents,
-      contentSetting,
-      currentType
-    }
-
-    const processNodesCallback = (filesProps: IProcessNodesCallback) => {
-      const { content, fileNames, isStrictContent } = filesProps;
-      if (!fileNames?.includes(content.name) && isStrictContent) {
-        const error: IError = {
-          errorMessage: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
-          fullpath: content.fullDestination,
-          name: content.name,
-        };
-        errors.push(error);
-      }
-    }
-
-    processNodes(processNodesProps, processNodesCallback);
-  }
-
-  processFileTypes(configRunningBase, processFileTypesCallback);
-
-  return {
-    errors,
-  };
-  
-};
-
 const contentValidation = (
   contents: INode[],
   contentSetting: IDescriptor,
@@ -276,7 +165,6 @@ const formatValidation = (contents: INode[], contentSetting: IDescriptor) => {
 };
 
 export {
-  strictContentValidation,
   contentValidation,
   conventionValidation,
   formatValidation,

@@ -15,8 +15,9 @@ import {
   contentValidation,
   conventionValidation,
   formatValidation,
-  strictContentValidation,
 } from "./services/ValidationService";
+
+import { strictContentValidator } from "./services/validation-service";
 
 const globalErrors: IError[] = [];
 
@@ -40,7 +41,7 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
     }
   }
 
-  const strictContentResult = strictContentValidation(
+  const strictContentResult = strictContentValidator(
     contentSetting as IDescriptor,
     contents
   );
