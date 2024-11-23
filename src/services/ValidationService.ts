@@ -15,14 +15,29 @@ interface IBase {
 }
 
 const defaultBaseToRun: FileTypeArray = ["files", "directories"];
-interface IRunningBaseCallback {
+interface IProcessFileCallback {
   currentType: string;
   isDirectoryOrFile: string;
 }
 
-const runningBase = (
+interface IProcessFileTypeProps {
+  contents: INode[]
+  contentSetting: IDescriptor,
+  currentType: string 
+}
+
+interface IProcessNodesCallback {
+  content: INode,
+  ignoredFiles: string[],
+  staticContent: IContent[] | undefined,
+  isStrictContent: boolean | undefined,
+  fileNames: string[] | undefined
+}
+
+
+const processFileTypes = (
   props: IBase,
-  callback: (returnProps: IRunningBaseCallback) => void
+  callback: (returnProps: IProcessFileCallback) => void
 ): void => {
   const { fileType } = props;
   fileType.forEach((currentType: string) => {
@@ -35,21 +50,7 @@ const runningBase = (
   });
 };
 
-interface IRunnigFilesProps {
-  contents: INode[]
-  contentSetting: IDescriptor,
-  currentType: string 
-}
-
-interface IRunningFilesCallback {
-  content: INode,
-  ignoredFiles: string[],
-  staticContent: IContent[] | undefined,
-  isStrictContent: boolean | undefined,
-  fileNames: string[] | undefined
-}
-
-const runningFiles = (props: IRunnigFilesProps, callback: (props: IRunningFilesCallback) => void): void => {
+const processNodes = (props: IProcessFileTypeProps, callback: (props: IProcessNodesCallback) => void): void => {
   const { contents, contentSetting, currentType } = props;
   const ignoredFiles: string[] = contentSetting?.files.ignore;
   const ignoredDirectories = contentSetting?.directories.ignore;
@@ -67,7 +68,7 @@ const runningFiles = (props: IRunnigFilesProps, callback: (props: IRunningFilesC
     if (currentType === "directories" && !content.isDirectory) return false;
     if (thisFileOrDirShouldBeIgnore) return false;
 
-    const callbackProps: IRunningFilesCallback = {
+    const callbackProps: IProcessNodesCallback = {
       content,
       ignoredFiles,
       staticContent,
@@ -86,28 +87,31 @@ const strictContentValidation = (
 ) => {
   const errors: IError[] = [];
   const configRunningBase = { fileType: defaultBaseToRun };
-  const runningBaseCallback = (returnProps: IRunningBaseCallback) => {
+  const processFileTypesCallback = (returnProps: IProcessFileCallback) => {
     const { isDirectoryOrFile, currentType } = returnProps;
-    const runningFilesProps: IRunnigFilesProps = {
+
+    const processNodesProps: IProcessFileTypeProps = {
       contents,
       contentSetting,
       currentType
     }
-    const runningFilesCallback = (filesProps: IRunningFilesCallback) => {
+
+    const processNodesCallback = (filesProps: IProcessNodesCallback) => {
       const { content, fileNames, isStrictContent } = filesProps;
       if (!fileNames?.includes(content.name) && isStrictContent) {
         const error: IError = {
-          errorMessage: `[] The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
+          errorMessage: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
           fullpath: content.fullDestination,
           name: content.name,
         };
         errors.push(error);
       }
     }
-    runningFiles(runningFilesProps, runningFilesCallback);
+
+    processNodes(processNodesProps, processNodesCallback);
   }
 
-  runningBase(configRunningBase, runningBaseCallback);
+  processFileTypes(configRunningBase, processFileTypesCallback);
 
   return {
     errors,
