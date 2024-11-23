@@ -28,12 +28,12 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   const contentSetting = mainNode.contentSettings;
 
   for (const content of contents) {
-    const ignoreDirectories = contentSetting?.directories.ignore;
-    const ignoreFiles = contentSetting?.files.ignore;
+    const ignoredDirectories = contentSetting?.directories.ignore;
+    const ignoredFiles = contentSetting?.files.ignore;
 
     const thisFileOrDirShouldBeIgnore =
-      ignoreDirectories?.includes(content.name) ||
-      ignoreFiles?.includes(content.name);
+      ignoredDirectories?.includes(content.name) ||
+      ignoredFiles?.includes(content.name);
 
     const strictContentResult = strictContentValidation(
       contentSetting as IDescriptor,
@@ -45,27 +45,31 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
       runValidations(content as Partial<INode>);
     }
   }
-  const contentValidationResult = contentValidation(
-    contents,
-    contentSetting as IDescriptor,
-    fullDestination as string
-  );
-  if (contentValidationResult.errors.length)
-    globalErrors.push(...contentValidationResult.errors);
 
-  const conventionValidationResult = conventionValidation(
-    contents,
-    contentSetting as IDescriptor
-  );
-  if (conventionValidationResult.errors.length)
-    globalErrors.push(...conventionValidationResult.errors);
+  // const contentValidationResult = contentValidation(
+  //   contents,
+  //   contentSetting as IDescriptor,
+  //   fullDestination as string
+  // );
 
-  const formatValidationResult = formatValidation(
-    contents,
-    contentSetting as IDescriptor
-  );
-  if (formatValidationResult.errors.length)
-    globalErrors.push(...formatValidationResult.errors);
+  // if (contentValidationResult.errors.length)
+  //   globalErrors.push(...contentValidationResult.errors);
+
+  // const conventionValidationResult = conventionValidation(
+  //   contents,
+  //   contentSetting as IDescriptor
+  // );
+
+  // if (conventionValidationResult.errors.length)
+  //   globalErrors.push(...conventionValidationResult.errors);
+
+  // const formatValidationResult = formatValidation(
+  //   contents,
+  //   contentSetting as IDescriptor
+  // );
+
+  // if (formatValidationResult.errors.length)
+  //   globalErrors.push(...formatValidationResult.errors);
 };
 
 async function main(dest: string): Promise<void> {

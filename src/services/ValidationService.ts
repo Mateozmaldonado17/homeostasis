@@ -8,6 +8,32 @@ import { isPascalCase, toPascalCase } from "../utils/PascalCase";
 import { isSnakeCase, toSnakeCase } from "../utils/SnakeCase";
 import { descriptorFile } from "./DescriptorService";
 
+type FileTypeArray = ("files" | "directories")[];
+
+interface IBase {
+  fileType: FileTypeArray;
+} 
+
+const defaultBaseToRun: FileTypeArray = ["files", "directories"];
+interface ICallbackProps {
+  isDirectoryOrFile: string
+}
+
+const runningBase = (props: IBase, callback: (returnProps: ICallbackProps) => void): void => {
+  const { fileType } = props;
+  fileType.forEach((currentType: string) => {
+    const isDirectoryOrFile = currentType === "directories" ? "directory" : "file";
+    callback({
+      isDirectoryOrFile
+    })
+  });
+}
+
+runningBase({ fileType: defaultBaseToRun }, (returnProps: ICallbackProps) => {
+  const { isDirectoryOrFile } = returnProps;
+  console.log(isDirectoryOrFile);
+})
+
 const strictContentValidation = (descriptor: IDescriptor, content: INode) => {
   const errors: IError[] = [];
   ["files", "directories"].forEach((type) => {
