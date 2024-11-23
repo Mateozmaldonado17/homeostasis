@@ -1,4 +1,4 @@
-import { IDescriptor, INode } from "../models";
+import { IContent, IDescriptor, INode } from "../models";
 import { ConventionList } from "../models/IDescriptor";
 import IError from "../models/IError";
 import { isCamelCase, toCamelCase } from "../utils/CamelCase";
@@ -12,51 +12,102 @@ type FileTypeArray = ("files" | "directories")[];
 
 interface IBase {
   fileType: FileTypeArray;
-} 
+}
 
 const defaultBaseToRun: FileTypeArray = ["files", "directories"];
 interface ICallbackProps {
-  isDirectoryOrFile: string
+  currentType: string;
+  isDirectoryOrFile: string;
 }
 
-const runningBase = (props: IBase, callback: (returnProps: ICallbackProps) => void): void => {
+const runningBase = (
+  props: IBase,
+  callback: (returnProps: ICallbackProps) => void
+): void => {
   const { fileType } = props;
   fileType.forEach((currentType: string) => {
-    const isDirectoryOrFile = currentType === "directories" ? "directory" : "file";
+    const isDirectoryOrFile =
+      currentType === "directories" ? "directory" : "file";
     callback({
-      isDirectoryOrFile
-    })
+      currentType,
+      isDirectoryOrFile,
+    });
   });
+};
+
+interface IRunnigFilesProps {
+  contents: INode[]
+  contentSetting: IDescriptor,
+  currentType: string 
 }
 
-runningBase({ fileType: defaultBaseToRun }, (returnProps: ICallbackProps) => {
-  const { isDirectoryOrFile } = returnProps;
-  console.log(isDirectoryOrFile);
-})
+interface IRunningFilesCallback {
+  content: INode,
+  ignoredFiles: string[],
+  staticContent: IContent[] | undefined,
+  isStrictContent: boolean | undefined,
+  fileNames: string[] | undefined
+}
 
-const strictContentValidation = (descriptor: IDescriptor, content: INode) => {
-  const errors: IError[] = [];
-  ["files", "directories"].forEach((type) => {
-    if (type === "files" && content.isDirectory) return false;
-    if (type === "directories" && !content.isDirectory) return false;
-    const isDirectoryOrFile = type === "directories" ? "directory" : "file";
-    const ignoredFiles = descriptor?.[type].ignore;
-    if (ignoredFiles?.includes(content.name)) return;
-    const staticContent = descriptor?.[type].content;
-    const isStrictContent = descriptor?.[type].strict_content;
+const runningFiles = (props: IRunnigFilesProps, callback: (props: IRunningFilesCallback) => void): void => {
+  const { contents, contentSetting, currentType } = props;
+  const ignoredFiles: string[] = contentSetting?.files.ignore;
+  contents.forEach((content: INode) => {
+
+    const staticContent = contentSetting?.[currentType].content;
+    const isStrictContent = contentSetting?.[currentType].strict_content;
     const fileNames = staticContent?.map((typeFile) => typeFile.name);
-    if (!fileNames?.includes(content.name) && isStrictContent) {
-      const error: IError = {
-        errorMessage: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
-        fullpath: content.fullDestination,
-        name: content.name,
-      };
-      errors.push(error);
+
+    if (currentType === "files" && content.isDirectory) return false;
+    if (currentType === "directories" && !content.isDirectory) return false;
+    if (ignoredFiles?.includes(content.name)) return false;
+
+    const callbackProps: IRunningFilesCallback = {
+      content,
+      ignoredFiles,
+      staticContent,
+      isStrictContent,
+      fileNames
+    };
+
+    callback(callbackProps)
+  })
+}
+
+
+const strictContentValidation = (
+  contentSetting: IDescriptor,
+  contents: INode[]
+) => {
+  const errors: IError[] = [];
+  const configRunningBase = { fileType: defaultBaseToRun };
+  const runningBaseCallback = (returnProps: ICallbackProps) => {
+    const { isDirectoryOrFile, currentType } = returnProps;
+    const runningFilesProps: IRunnigFilesProps = {
+      contents,
+      contentSetting,
+      currentType
     }
-  });
+    const runningFilesCallback = (filesProps: IRunningFilesCallback) => {
+      const { content, ignoredFiles, fileNames, isStrictContent, staticContent } = filesProps;
+      if (!fileNames?.includes(content.name) && isStrictContent) {
+        const error: IError = {
+          errorMessage: `[] The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
+          fullpath: content.fullDestination,
+          name: content.name,
+        };
+        errors.push(error);
+      }
+    }
+    runningFiles(runningFilesProps, runningFilesCallback);
+  }
+
+  runningBase(configRunningBase, runningBaseCallback);
+
   return {
     errors,
   };
+  
 };
 
 const contentValidation = (

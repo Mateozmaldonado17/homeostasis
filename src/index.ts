@@ -34,17 +34,19 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
     const thisFileOrDirShouldBeIgnore =
       ignoredDirectories?.includes(content.name) ||
       ignoredFiles?.includes(content.name);
-
-    const strictContentResult = strictContentValidation(
-      contentSetting as IDescriptor,
-      content
-    );
-    if (strictContentResult.errors.length)
-      globalErrors.push(...strictContentResult.errors);
+    
     if (content.isIterable && !thisFileOrDirShouldBeIgnore) {
       runValidations(content as Partial<INode>);
     }
   }
+
+  const strictContentResult = strictContentValidation(
+    contentSetting as IDescriptor,
+    contents
+  );
+
+  if (strictContentResult.errors.length)
+    globalErrors.push(...strictContentResult.errors);
 
   // const contentValidationResult = contentValidation(
   //   contents,
