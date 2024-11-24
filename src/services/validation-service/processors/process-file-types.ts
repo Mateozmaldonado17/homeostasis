@@ -8,6 +8,7 @@ const processFileTypes = (
   const { fileType, contentSetting, contents } = props;
 
   fileType.forEach((currentType: string) => {
+    const conventionFormat = contentSetting?.[currentType].convention;
     const ignoredFiles = contentSetting?.[currentType].ignore;
 
     const descriptorContent: string[] | undefined = contentSetting?.[
@@ -33,7 +34,8 @@ const processFileTypes = (
       currentType,
       isDirectoryOrFile,
       filteredMappedContent,
-      descriptorContent
+      descriptorContent,
+      conventionFormat
     });
   });
 };

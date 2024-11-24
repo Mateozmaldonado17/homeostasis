@@ -1,4 +1,5 @@
 import { IContent, IDescriptor, INode } from "../../../models";
+import { ConventionList } from "../../../models/IDescriptor";
 
 type FileTypeArray = ("files" | "directories")[];
 
@@ -16,6 +17,7 @@ interface IProcessFileCallback {
   filteredMappedContent: INode[];
   descriptorContent: string[] | undefined;
   ignoredFiles: string[] | undefined;
+  conventionFormat: ConventionList | undefined
 }
 
 interface IProcessFileTypeProps {

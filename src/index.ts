@@ -11,12 +11,12 @@ import { readDirectory } from "./services/FileSystemService";
 import { traverseNodes } from "./services/NodeService";
 import * as Logger from "./utils/Logger";
 import IError from "./models/IError";
-import {
-  conventionValidation,
+import  {
   formatValidation,
 } from "./services/ValidationService";
 
 import { strictContentValidator, validateRequiredContent } from "./services/validation-service";
+import validateNamingConventions from "./services/validation-service/validators/validate-naming-conventions";
 
 const globalErrors: IError[] = [];
 
@@ -57,13 +57,13 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   if (contentValidationResult.errors.length)
     globalErrors.push(...contentValidationResult.errors);
 
-  // const conventionValidationResult = conventionValidation(
-  //   contents,
-  //   contentSetting as IDescriptor
-  // );
+  const conventionValidationResult = validateNamingConventions(
+    contents,
+    contentSetting as IDescriptor
+  );
 
-  // if (conventionValidationResult.errors.length)
-  //   globalErrors.push(...conventionValidationResult.errors);
+  if (conventionValidationResult.errors.length)
+    globalErrors.push(...conventionValidationResult.errors);
 
   // const formatValidationResult = formatValidation(
   //   contents,
