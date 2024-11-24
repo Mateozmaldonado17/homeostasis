@@ -1,3 +1,4 @@
+import kleur from 'kleur';
 import { IDescriptor, IError, INode } from "../../../models";
 import { ConventionList } from "../../../models/IDescriptor";
 import { isCamelCase, toCamelCase } from "../../../utils/CamelCase";
@@ -50,7 +51,7 @@ const validateNamingConventions = (
           suggestedName = toKebabCase(content.name);
           break;
         default:
-          console.warn(`Unknown convention format: ${conventionFormat}, we couln't apply this format to this file: ${content.fullDestination} (${content.name}).`);
+          console.warn(`${kleur.red('ERROR')} ${conventionFormat}, we couln't apply this format to this file: ${content.fullDestination} (${content.name}).`);
           return;
       }
 

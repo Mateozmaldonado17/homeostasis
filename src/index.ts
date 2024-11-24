@@ -9,7 +9,7 @@ import {
 } from "./services/DescriptorService";
 import { readDirectory } from "./services/FileSystemService";
 import { traverseNodes } from "./services/NodeService";
-import * as Logger from "./utils/Logger";
+import * as Logger from "./utils/logger/Logger";
 import IError from "./models/IError";
 import  {
   formatValidation,
@@ -17,6 +17,7 @@ import  {
 
 import { strictContentValidator, validateRequiredContent } from "./services/validation-service";
 import validateNamingConventions from "./services/validation-service/validators/validate-naming-conventions";
+import { ErrorTypeEnum } from "./enums";
 
 const globalErrors: IError[] = [];
 
@@ -101,7 +102,7 @@ async function main(dest: string): Promise<void> {
   } catch (error: any) {
     console.log(error.message);
     globalErrors.map((error: IError) => {
-      Logger.error(error.errorMessage);
+      Logger.sendLog({ errorType: ErrorTypeEnum.ERROR, message: error.errorMessage});
     });
   }
 }
