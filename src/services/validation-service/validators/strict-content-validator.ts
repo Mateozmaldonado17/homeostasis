@@ -12,7 +12,7 @@ const strictContentValidator = (
   contents: INode[]
 ) => {
   const errors: IError[] = [];
-  const configRunningBase = { fileType: DefaultBaseToRun };
+  const configRunningBase = { fileType: DefaultBaseToRun, contentSetting, contents };
   const processFileTypesCallback = (returnProps: IProcessFileCallback) => {
     const { isDirectoryOrFile, currentType } = returnProps;
     const processNodesProps: IProcessFileTypeProps = {

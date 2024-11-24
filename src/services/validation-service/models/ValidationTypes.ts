@@ -6,11 +6,16 @@ const DefaultBaseToRun: FileTypeArray = ["files", "directories"];
 
 interface IBase {
   fileType: FileTypeArray;
+  contentSetting: IDescriptor
+  contents: INode[];
 }
 
 interface IProcessFileCallback {
   currentType: string;
   isDirectoryOrFile: string;
+  filteredMappedContent: INode[];
+  descriptorContent: string[] | undefined;
+  ignoredFiles: string[] | undefined;
 }
 
 interface IProcessFileTypeProps {
@@ -29,9 +34,9 @@ interface IProcessNodesCallback {
 
 export {
   FileTypeArray,
-  DefaultBaseToRun,
   IBase,
   IProcessFileCallback,
   IProcessFileTypeProps,
   IProcessNodesCallback,
+  DefaultBaseToRun,
 };

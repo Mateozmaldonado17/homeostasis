@@ -12,12 +12,11 @@ import { traverseNodes } from "./services/NodeService";
 import * as Logger from "./utils/Logger";
 import IError from "./models/IError";
 import {
-  contentValidation,
   conventionValidation,
   formatValidation,
 } from "./services/ValidationService";
 
-import { strictContentValidator } from "./services/validation-service";
+import { strictContentValidator, validateRequiredContent } from "./services/validation-service";
 
 const globalErrors: IError[] = [];
 
@@ -49,14 +48,14 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   if (strictContentResult.errors.length)
     globalErrors.push(...strictContentResult.errors);
 
-  // const contentValidationResult = contentValidation(
-  //   contents,
-  //   contentSetting as IDescriptor,
-  //   fullDestination as string
-  // );
+  const contentValidationResult = validateRequiredContent(
+    contents,
+    contentSetting as IDescriptor,
+    fullDestination as string
+  );
 
-  // if (contentValidationResult.errors.length)
-  //   globalErrors.push(...contentValidationResult.errors);
+  if (contentValidationResult.errors.length)
+    globalErrors.push(...contentValidationResult.errors);
 
   // const conventionValidationResult = conventionValidation(
   //   contents,
