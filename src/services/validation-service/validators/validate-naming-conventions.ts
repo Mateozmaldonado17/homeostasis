@@ -1,8 +1,9 @@
-import kleur from 'kleur';
+import { ErrorTypeEnum } from "../../../enums";
 import { IDescriptor, IError, INode } from "../../../models";
 import { ConventionList } from "../../../models/IDescriptor";
 import { isCamelCase, toCamelCase } from "../../../utils/CamelCase";
 import { isKebabCase, toKebabCase } from "../../../utils/KebabCase";
+import { getErrorFormated } from "../../../utils/logger/Logger";
 import { isPascalCase, toPascalCase } from "../../../utils/PascalCase";
 import { isSnakeCase, toSnakeCase } from "../../../utils/SnakeCase";
 import { descriptorFile } from "../../DescriptorService";
@@ -51,7 +52,11 @@ const validateNamingConventions = (
           suggestedName = toKebabCase(content.name);
           break;
         default:
-          console.warn(`${kleur.red('ERROR')} ${conventionFormat}, we couln't apply this format to this file: ${content.fullDestination} (${content.name}).`);
+          const errorMessage = getErrorFormated({
+            errorType: ErrorTypeEnum.SUCCESS,
+            message: `${conventionFormat}, we couln't apply this format to this file: ${content.fullDestination} (${content.name})`,
+          });
+          console.warn(errorMessage);
           return;
       }
 

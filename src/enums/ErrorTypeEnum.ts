@@ -1,8 +1,9 @@
 enum ErrorTypeEnum {
-    FATAL = "fatal",
-    ERROR = "error",
-    WARNING = "warning",
-    LOG = "log"
+    FATAL = "FATAL",
+    ERROR = "ERROR",
+    SUCCESS = "SUCCESS",
+    WARNING = "WARNING",
+    LOG = "LOG"
 }
 
 export default ErrorTypeEnum;
