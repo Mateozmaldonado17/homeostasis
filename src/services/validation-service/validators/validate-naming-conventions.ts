@@ -4,7 +4,6 @@ import { ConventionList } from "../../../models/IDescriptor";
 import IResponse from "../../../models/IResponse";
 import { isCamelCase, toCamelCase } from "../../../utils/CamelCase";
 import { isKebabCase, toKebabCase } from "../../../utils/KebabCase";
-import { getErrorFormated } from "../../../utils/logger/Logger";
 import { isPascalCase, toPascalCase } from "../../../utils/PascalCase";
 import { isSnakeCase, toSnakeCase } from "../../../utils/SnakeCase";
 import { descriptorFile } from "../../DescriptorService";
@@ -55,7 +54,7 @@ const validateNamingConventions = (
           break;
         default:
           const response: IResponse = {
-            message: `${conventionFormat}, we couln't apply this format to this file: ${content.fullDestination} (${content.name})`,
+            message: `The convention "${conventionFormat}" could not be applied to the file "${content.name}" located at "${content.fullDestination}".`,
             logType: SystemLogTypeEnum.FATAL,
             fullpath: content.fullDestination,
             name: content.name,
@@ -66,9 +65,9 @@ const validateNamingConventions = (
 
       if (!isValid) {
         const response: IResponse = {
-          message: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${
-            content.name
-          }) is not ${conventionFormat.toLowerCase()}, should be (${suggestedName})`,
+          message: `The ${isDirectoryOrFile} "${content.name}" located at "${
+            content.fullDestination
+          }" does not follow the ${conventionFormat.toLowerCase()} convention. It should be renamed to "${suggestedName}".`,
           logType: SystemLogTypeEnum.ERROR,
           fullpath: content.fullDestination,
           name: content.name,

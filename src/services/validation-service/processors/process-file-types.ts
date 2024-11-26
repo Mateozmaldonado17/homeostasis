@@ -6,6 +6,7 @@ const processFileTypes = (
   callback: (returnProps: IProcessFileCallback) => void
 ): void => {
   const { fileType, contentSetting, contents } = props;
+  const formatFiles = contentSetting.files.allowedFormats || [];
 
   fileType.forEach((currentType: string) => {
     const conventionFormat = contentSetting?.[currentType].convention;
@@ -35,7 +36,8 @@ const processFileTypes = (
       isDirectoryOrFile,
       filteredMappedContent,
       descriptorContent,
-      conventionFormat
+      conventionFormat,
+      formatFiles
     });
   });
 };

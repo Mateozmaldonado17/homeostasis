@@ -26,7 +26,7 @@ const strictContentValidator = (
       const { content, fileNames, isStrictContent } = filesProps;
       if (!fileNames?.includes(content.name) && isStrictContent) {
         const response: IResponse = {
-          message: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${content.name}) is not allowed based on the strict content mode.`,
+          message: `The ${isDirectoryOrFile} "${content.name}" located at "${content.fullDestination}" is not permitted under the strict content mode.`,
           logType: SystemLogTypeEnum.ERROR,
           fullpath: content.fullDestination,
           name: content.name,
