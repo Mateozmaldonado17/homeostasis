@@ -1,91 +1,95 @@
 # HomeostasisJS
 
-## 🚀 **Controla la Entropía de tus Proyectos JavaScript**
+## 🚀 Control the Entropy of Your JavaScript Projects\*\*
 
-HomeostasisJS es un linter para la estructura de tus proyectos JavaScript. Con esta herramienta, puedes especificar y aplicar reglas claras para organizar tus carpetas y archivos, asegurando que el crecimiento de tu proyecto sea consistente y mantenible.
+HomeostasisJS is a linter specifically designed for the structure of your JavaScript projects. This tool enables you to define and enforce clear rules for organizing folders and files, ensuring that your project's growth remains consistent and maintainable.
+
+As projects grow, it's common for their structure to become chaotic, leading to challenges such as:
+
+- **Difficulty locating files.**
+- **High maintenance costs.**
+- **Steep learning curves for new developers.**
 
 ---
 
-### **¿Por qué HomeostasisJS?**
+### **¿Why HomeostasisJS?**
 
-A medida que los proyectos crecen, es común que la estructura se vuelva caótica, lo que puede llevar a:
 - **Dificultad para encontrar archivos.**
 - **Altos costos de mantenimiento.**
 - **Curvas de aprendizaje más largas para nuevos desarrolladores.**
 
-HomeostasisJS resuelve estos problemas permitiéndote definir desde el principio las convenciones de tu proyecto y asegurando que estas se respeten automáticamente. Esto permite que haya **feedback negativo** en nuestros proyectos, reduciendo la entropía y promoviendo una estructura más ordenada y consistente.
+HomeostasisJS addresses these issues by allowing you to define project conventions early on and ensuring they are automatically enforced. This creates a system of **negative feedback** within your projects, reducing entropy and fostering a more structured and consistent architecture.
 
-1. **Instala globalmente la libreria**
-  ```bash
-  npm install -g homeostasis
-  ```
+- **📁 Maintain Order:** Prevent the chaos that naturally arises as your codebase expands.
+- **✅ Enforce Rules Automatically:** Prevent the chaos that naturally arises as your codebase expands.
+- **🌱 Scale with Confidence:** Prevent the chaos that naturally arises as your codebase expands.
 
-2. **Crea un archivo descriptor:**  
-   En cada carpeta que desees controlar, agrega un archivo `descriptor.json` con la configuración específica. Ejemplo:
+Keep your projects in homeostasis—a state of balance and organization—by managing the structure proactively from day one.
 
-```json
-{
-  "directories": {
-    "strict_content": false,
-    "convention": "kebab-case",
-    "ignore": ["__mocks__"],
-    "content": [
-      {
-        "name": "components",
-        "description": "Contiene los componentes reutilizables de la aplicación"
-      },
-      {
-        "name": "pages",
-        "description": "Contiene las páginas principales de la aplicación"
-      },
-      {
-        "name": "hooks",
-        "description": "Almacena hooks personalizados"
-      },
-      {
-        "name": "contexts",
-        "description": "Define los contextos globales para el estado"
-      },
-      {
-        "name": "services",
-        "description": "Contiene lógica para integraciones con APIs"
-      },
-      {
-        "name": "utils",
-        "description": "Funciones de utilidad compartidas en el proyecto"
-      },
-      {
-        "name": "assets",
-        "description": "Archivos estáticos como imágenes, estilos, y fuentes"
-      },
-      {
-        "name": "styles",
-        "description": "Define los estilos globales o temas de la aplicación"
-      }
-    ]
-  },
-  "files": {
-    "convention": "kebab-case",
-    "strict_content": false,
-    "ignore": ["file.js"],
-    "allowedFormats": [".js", ".ts"],
-    "content": [
-      {
-        "name": "index.ts",
-        "description": "Archivo que exporta components"
-      }
-    ]
-  }
-}
+1. **Installs the library globally**
+
+```bash
+npm install -g homeostasis
 ```
 
-- **`directories`:** Reglas para carpetas (estrictas o con convenciones).
-- **`files`:** Reglas para archivos, incluyendo límite de archivos y contenido esperado.
+2. **Create a Descriptor File:**  
+   In each folder you want to manage, include a descriptor.js file containing the specific configuration for that folder. For example:
 
-Convenciones soportadas: `camel-case`, `snake-case`, `kebab-case`, `pascal-case`.
+```javascript
+const config = {
+  directories: {
+    strict_content: false,
+    convention: "pascal-case",
+    ignore: ["dist"],
+    content: [
+      {
+        name: "Components",
+        motivation:
+          "Encapsulate reusable UI elements to promote modularity and consistency across the application",
+      },
+      {
+        name: "Services",
+        motivation:
+          "Handle business logic and external API interactions, ensuring a clean separation of concerns.",
+      },
+      {
+        name: "Repositories",
+        motivation:
+          "Manage data access and storage, acting as a bridge between the application and its data sources.",
+      },
+      {
+        name: "Utils",
+        motivation:
+          "Provide utility functions and helpers to streamline common operations and avoid code duplication.",
+      },
+    ],
+  },
+  files: {
+    strict_content: false,
+    content: [
+      {
+        name: "index.ts",
+      },
+      {
+        name: "descriptor.js",
+      },
+    ],
+    ignore: [],
+    allowedFormats: [".ts", ".js"],
+    convention: "kebab-case",
+  },
+};
 
-3. **Ejecuta Homeostasis**
-  
-  ```bash
-  homeostasis ./path/to/your/project
-  ```
+module.exports = config;
+```
+
+- **`directories`:** Rules for folders (strict or convention-based).
+- **`files`:** Rules for files, including file limits and expected content.
+
+Supported conventions: `camel-case`, `snake-case`, `kebab-case`, `pascal-case`.
+
+3. **Run Homeostasis**
+
+```bash
+homeostasis ./path/to/your/project
+```
