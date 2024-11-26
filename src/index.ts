@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 "use strict";
+import * as Logger from "./utils/logger/Logger";
 import * as fs from "fs";
 import { IDescriptor, INode } from "./models";
 import {
@@ -9,11 +10,8 @@ import {
 } from "./services/DescriptorService";
 import { readDirectory } from "./services/FileSystemService";
 import { traverseNodes } from "./services/NodeService";
-import * as Logger from "./utils/logger/Logger";
-
 import { strictContentValidator, validateRequiredContent } from "./services/validation-service";
 import validateNamingConventions from "./services/validation-service/validators/validate-naming-conventions";
-import { SystemLogTypeEnum } from "./enums";
 import IResponse from "./models/IResponse";
 import checkFileFormatCompliance from "./services/validation-service/validators/check-file-format-compliance";
 
@@ -98,10 +96,10 @@ async function main(dest: string): Promise<void> {
     if (globalResponses.length)
       throw new Error(`(\x1b[1;31m${globalResponses.length}\x1b[0m) Errors found.`);
     if (!globalResponses.length) console.log("\x1b[1;32m0\x1b[0m Errors found. Everything looks perfect! 🎉");
-  } catch (error: any) {
-    console.log(error.message);
-    globalResponses.map((error: IResponse) => {
-      Logger.sendLog({ errorType: SystemLogTypeEnum.ERROR, message: error.message});
+  } catch (response: any) {
+    console.log(response.message);
+    globalResponses.map((response: IResponse) => {
+      Logger.sendLog({ logType: response.logType, message: response.message });
     });
   }
 }

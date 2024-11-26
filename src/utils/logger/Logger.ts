@@ -1,19 +1,15 @@
 import { SystemLogTypeEnum } from "../../enums";
+import IResponse from "../../models/IResponse";
 
 const reset = "\x1b[0m";
 
-interface IGetErrorProps {
-  errorType: SystemLogTypeEnum;
-  message: string;
-}
-
-const getErrorFormated = (props: IGetErrorProps): string => {
-  const { errorType, message } = props;
+const getLogFormatted = (props: IResponse): string => {
+  const { logType, message } = props;
   let errorTypeFormatted;
   let backgroundColor;
   let textColor;
 
-  switch (errorType) {
+  switch (logType) {
     case SystemLogTypeEnum.FATAL:
       errorTypeFormatted = SystemLogTypeEnum.FATAL;
       backgroundColor = "\x1b[48;2;139;0;0m";
@@ -44,9 +40,9 @@ const getErrorFormated = (props: IGetErrorProps): string => {
   return `${backgroundColor}${textColor}[${errorTypeFormatted}]${reset}: ${message}`;
 };
 
-const sendLog = (props: IGetErrorProps): void => {
-  const formattedMessage = getErrorFormated(props);
+const sendLog = (props: Partial<IResponse>): void => {
+  const formattedMessage = getLogFormatted(props as IResponse);
   console.log(formattedMessage);
 };
 
-export { getErrorFormated, sendLog };
+export { getLogFormatted, sendLog };
