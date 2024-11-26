@@ -94,8 +94,8 @@ async function main(dest: string): Promise<void> {
 
     console.log("[Homeostasis]");
     if (globalResponses.length)
-      throw new Error(`⚠ ${globalResponses.length} errors found`);
-    if (!globalResponses.length) console.log("✅ errors not found");
+      throw new Error(`(\x1b[1;31m${globalResponses.length}\x1b[0m) Errors found.`);
+    if (!globalResponses.length) console.log("\x1b[1;32m0\x1b[0m Errors found. Everything looks perfect! 🎉");
   } catch (error: any) {
     console.log(error.message);
     globalResponses.map((error: IResponse) => {
