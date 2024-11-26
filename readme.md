@@ -1,6 +1,6 @@
 # HomeostasisJS
 
-## 🚀 Control the Entropy of Your JavaScript Projects\*\*
+## 🚀 Control the Entropy of Your JavaScript Projects ##
 
 HomeostasisJS is a linter specifically designed for the structure of your JavaScript projects. This tool enables you to define and enforce clear rules for organizing folders and files, ensuring that your project's growth remains consistent and maintainable.
 
