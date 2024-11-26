@@ -1,10 +1,12 @@
+import { SystemLogTypeEnum } from "../enums";
 import { IDescriptor, INode } from "../models";
-import IError from "../models/IError";
+import IResponse from "../models/IResponse";
+import IError from "../models/IResponse";
 import extractFileFormat from "../utils/ExtractFileFormat";
 import { descriptorFile } from "./DescriptorService";
 
 const formatValidation = (contents: INode[], contentSetting: IDescriptor) => {
-  const errors: IError[] = [];
+  const responses: IError[] = [];
   const ignoredFiles = contentSetting.files.ignore;
   const formatFiles = contentSetting.files.allowedFormats || [];
   const mappedContent = contents.map((content: INode) => {
@@ -20,16 +22,17 @@ const formatValidation = (contents: INode[], contentSetting: IDescriptor) => {
     if (content.name === descriptorFile) return false;
     const getFileFormat = extractFileFormat(content.name);
     if (!formatFiles.includes(getFileFormat)) {
-      const error: IError = {
-        errorMessage: `This file in "${content.fullDestination}" (${content.name}) has format ${getFileFormat} and is not allowed in this folder.`,
+      const response: IResponse = {
+        message: `This file in "${content.fullDestination}" (${content.name}) has format ${getFileFormat} and is not allowed in this folder.`,
+        logType: SystemLogTypeEnum.ERROR,
         fullpath: content.fullDestination,
         name: content.name,
       };
-      errors.push(error);
+      responses.push(response);
     }
   });
   return {
-    errors,
+    responses,
   };
 };
 

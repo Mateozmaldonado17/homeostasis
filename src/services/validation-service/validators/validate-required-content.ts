@@ -1,4 +1,6 @@
-import { IDescriptor, IError, INode } from "../../../models";
+import { SystemLogTypeEnum } from "../../../enums";
+import { IDescriptor, INode } from "../../../models";
+import IResponse from "../../../models/IResponse";
 import {
   DefaultBaseToRun,
   IProcessFileCallback,
@@ -10,7 +12,7 @@ const validateRequiredContent = (
   contentSetting: IDescriptor,
   root: string
 ) => {
-  const errors: IError[] = [];
+  const responses: IResponse[] = [];
   const configRunningBase = {
     fileType: DefaultBaseToRun,
     contentSetting,
@@ -31,19 +33,20 @@ const validateRequiredContent = (
       );
 
       if (!includeContentInMappedContent) {
-        const error: IError = {
-          errorMessage: `The ${isDirectoryOrFile} in "${root}" (${content}) is essential in the source.`,
+        const response: IResponse = {
+          message: `The ${isDirectoryOrFile} in "${root}" (${content}) is essential in the source.`,
+          logType: SystemLogTypeEnum.ERROR,
           fullpath: root,
           name: content,
         };
-        errors.push(error);
+        responses.push(response);
       }
     });
   };
   processFileTypes(configRunningBase, processFileTypesCallback);
 
   return {
-    errors,
+    responses,
   };
 };
 

@@ -1,4 +1,4 @@
-enum ErrorTypeEnum {
+enum SystemLogTypeEnum {
     FATAL = "FATAL",
     ERROR = "ERROR",
     SUCCESS = "SUCCESS",
@@ -6,4 +6,4 @@ enum ErrorTypeEnum {
     LOG = "LOG"
 }
 
-export default ErrorTypeEnum;
+export default SystemLogTypeEnum;

@@ -1,9 +1,9 @@
-import { ErrorTypeEnum } from "../../enums";
+import { SystemLogTypeEnum } from "../../enums";
 
 const reset = "\x1b[0m";
 
 interface IGetErrorProps {
-  errorType: ErrorTypeEnum;
+  errorType: SystemLogTypeEnum;
   message: string;
 }
 
@@ -14,28 +14,28 @@ const getErrorFormated = (props: IGetErrorProps): string => {
   let textColor;
 
   switch (errorType) {
-    case ErrorTypeEnum.FATAL:
-      errorTypeFormatted = ErrorTypeEnum.FATAL;
+    case SystemLogTypeEnum.FATAL:
+      errorTypeFormatted = SystemLogTypeEnum.FATAL;
       backgroundColor = "\x1b[48;2;139;0;0m";
       textColor = "\x1b[38;2;255;255;255m";
       break;
-    case ErrorTypeEnum.ERROR:
-      errorTypeFormatted = ErrorTypeEnum.ERROR;
+    case SystemLogTypeEnum.ERROR:
+      errorTypeFormatted = SystemLogTypeEnum.ERROR;
       backgroundColor = "\x1b[48;2;255;0;0m";
       textColor = "\x1b[38;2;255;255;255m";
       break;
-    case ErrorTypeEnum.WARNING:
-      errorTypeFormatted = ErrorTypeEnum.WARNING;
+    case SystemLogTypeEnum.WARNING:
+      errorTypeFormatted = SystemLogTypeEnum.WARNING;
       backgroundColor = "\x1b[48;2;255;255;0m";
       textColor = "\x1b[38;2;0;0;0m";
       break;
-    case ErrorTypeEnum.SUCCESS:
-      errorTypeFormatted = ErrorTypeEnum.SUCCESS;
+    case SystemLogTypeEnum.SUCCESS:
+      errorTypeFormatted = SystemLogTypeEnum.SUCCESS;
       backgroundColor = "\x1b[38;2;0;0;0m";
       textColor = "\x1b[38;2;0;255;0m";
       break;
     default:
-      errorTypeFormatted = ErrorTypeEnum.LOG;
+      errorTypeFormatted = SystemLogTypeEnum.LOG;
       backgroundColor = "\x1b[38;2;255;165;0m";
       textColor = "\x1b[38;2;255;255;255m";
       break;

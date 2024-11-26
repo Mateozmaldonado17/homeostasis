@@ -1,5 +1,5 @@
-import ErrorTypeEnum from "./ErrorTypeEnum";
+import SystemLogTypeEnum from "./SystemLogTypeEnum";
 
 export {
-    ErrorTypeEnum
+    SystemLogTypeEnum
 }

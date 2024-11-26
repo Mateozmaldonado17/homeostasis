@@ -1,6 +1,7 @@
-import { ErrorTypeEnum } from "../../../enums";
-import { IDescriptor, IError, INode } from "../../../models";
+import { SystemLogTypeEnum } from "../../../enums";
+import { IDescriptor, INode } from "../../../models";
 import { ConventionList } from "../../../models/IDescriptor";
+import IResponse from "../../../models/IResponse";
 import { isCamelCase, toCamelCase } from "../../../utils/CamelCase";
 import { isKebabCase, toKebabCase } from "../../../utils/KebabCase";
 import { getErrorFormated } from "../../../utils/logger/Logger";
@@ -17,7 +18,8 @@ const validateNamingConventions = (
   contents: INode[],
   contentSetting: IDescriptor
 ) => {
-  const errors: IError[] = [];
+  const responses: IResponse[] = [];
+
   const configRunningBase = {
     fileType: DefaultBaseToRun,
     contentSetting,
@@ -52,30 +54,31 @@ const validateNamingConventions = (
           suggestedName = toKebabCase(content.name);
           break;
         default:
-          const errorMessage = getErrorFormated({
-            errorType: ErrorTypeEnum.SUCCESS,
+          const response: IResponse = {
             message: `${conventionFormat}, we couln't apply this format to this file: ${content.fullDestination} (${content.name})`,
-          });
-          console.warn(errorMessage);
+            logType: SystemLogTypeEnum.FATAL,
+            fullpath: content.fullDestination,
+            name: content.name,
+          };
+          responses.push(response);
           return;
       }
 
       if (!isValid) {
-        const error: IError = {
-          errorMessage: `The ${isDirectoryOrFile} in "${
-            content.fullDestination
-          }" (${
+        const response: IResponse = {
+          message: `The ${isDirectoryOrFile} in "${content.fullDestination}" (${
             content.name
           }) is not ${conventionFormat.toLowerCase()}, should be (${suggestedName})`,
+          logType: SystemLogTypeEnum.ERROR,
           fullpath: content.fullDestination,
           name: content.name,
         };
-        errors.push(error);
+        responses.push(response);
       }
     });
   });
   return {
-    errors,
+    responses,
   };
 };
 

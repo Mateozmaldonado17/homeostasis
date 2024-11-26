@@ -10,16 +10,13 @@ import {
 import { readDirectory } from "./services/FileSystemService";
 import { traverseNodes } from "./services/NodeService";
 import * as Logger from "./utils/logger/Logger";
-import IError from "./models/IError";
-import  {
-  formatValidation,
-} from "./services/ValidationService";
 
 import { strictContentValidator, validateRequiredContent } from "./services/validation-service";
 import validateNamingConventions from "./services/validation-service/validators/validate-naming-conventions";
-import { ErrorTypeEnum } from "./enums";
+import { SystemLogTypeEnum } from "./enums";
+import IResponse from "./models/IResponse";
 
-const globalErrors: IError[] = [];
+const globalResponses: IResponse[] = [];
 
 const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   const contents = mainNode.content as INode[];
@@ -46,8 +43,8 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
     contents
   );
 
-  if (strictContentResult.errors.length)
-    globalErrors.push(...strictContentResult.errors);
+  if (strictContentResult.responses.length)
+    globalResponses.push(...strictContentResult.responses);
 
   const contentValidationResult = validateRequiredContent(
     contents,
@@ -55,16 +52,16 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
     fullDestination as string
   );
 
-  if (contentValidationResult.errors.length)
-    globalErrors.push(...contentValidationResult.errors);
+  if (contentValidationResult.responses.length)
+    globalResponses.push(...contentValidationResult.responses);
 
   const conventionValidationResult = validateNamingConventions(
     contents,
     contentSetting as IDescriptor
   );
 
-  if (conventionValidationResult.errors.length)
-    globalErrors.push(...conventionValidationResult.errors);
+  if (conventionValidationResult.responses.length)
+    globalResponses.push(...conventionValidationResult.responses);
 
   // const formatValidationResult = formatValidation(
   //   contents,
@@ -72,7 +69,7 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   // );
 
   // if (formatValidationResult.errors.length)
-  //   globalErrors.push(...formatValidationResult.errors);
+  //   globalResponses.push(...formatValidationResult.errors);
 };
 
 async function main(dest: string): Promise<void> {
@@ -96,13 +93,13 @@ async function main(dest: string): Promise<void> {
     await runValidations(rootNodeRefactored);
 
     console.log("[Homeostasis]");
-    if (globalErrors.length)
-      throw new Error(`⚠ ${globalErrors.length} errors found`);
-    if (!globalErrors.length) console.log("✅ errors not found");
+    if (globalResponses.length)
+      throw new Error(`⚠ ${globalResponses.length} errors found`);
+    if (!globalResponses.length) console.log("✅ errors not found");
   } catch (error: any) {
     console.log(error.message);
-    globalErrors.map((error: IError) => {
-      Logger.sendLog({ errorType: ErrorTypeEnum.ERROR, message: error.errorMessage});
+    globalResponses.map((error: IResponse) => {
+      Logger.sendLog({ errorType: SystemLogTypeEnum.ERROR, message: error.message});
     });
   }
 }
