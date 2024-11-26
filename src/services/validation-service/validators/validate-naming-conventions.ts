@@ -4,7 +4,6 @@ import { ConventionList } from "../../../models/IDescriptor";
 import IResponse from "../../../models/IResponse";
 import { isCamelCase, toCamelCase } from "../../../utils/CamelCase";
 import { isKebabCase, toKebabCase } from "../../../utils/KebabCase";
-import { getErrorFormated } from "../../../utils/logger/Logger";
 import { isPascalCase, toPascalCase } from "../../../utils/PascalCase";
 import { isSnakeCase, toSnakeCase } from "../../../utils/SnakeCase";
 import { descriptorFile } from "../../DescriptorService";
