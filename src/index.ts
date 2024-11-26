@@ -7,6 +7,7 @@ import { IDescriptor, INode } from "./models";
 import {
   descriptorFile,
   existsInDirectory,
+  loadJSModule,
 } from "./services/DescriptorService";
 import { readDirectory } from "./services/FileSystemService";
 import { traverseNodes } from "./services/NodeService";
@@ -82,9 +83,11 @@ async function main(dest: string): Promise<void> {
     const rootNode: INode[] = await readDirectory(dest);
     await traverseNodes(rootNode);
 
-    const rawData = fs.readFileSync(`${dest}/${descriptorFile}`, "utf8");
-    const data: IDescriptor = JSON.parse(rawData);
-
+    // const rawData = fs.readFileSync(`${dest}/${descriptorFile}`, "utf8");
+    // const data: IDescriptor = JSON.parse(rawData);
+    const data = await loadJSModule<IDescriptor>(`${dest}/${descriptorFile}`);
+    // console.log(filePath);
+    
     const rootNodeRefactored: Partial<INode> = {
       content: rootNode,
       contentSettings: data,

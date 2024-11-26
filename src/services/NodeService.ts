@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { IDescriptor, INode } from "../models/";
-import { descriptorFile, existsInDirectory } from "./DescriptorService";
+import { descriptorFile, existsInDirectory, loadJSModule } from "./DescriptorService";
 import { getStats, readDirectory } from "./FileSystemService";
 import * as Logger from "../utils/logger/Logger";
 
@@ -27,8 +27,9 @@ const createNode = async (
     };   
 
     if (isDirectory && isIterable) {
-      const rawData = fs.readFileSync(`${fullPath}/${descriptorFile}`, 'utf8');
-      const descriptorData: IDescriptor = JSON.parse(rawData);     
+      // const rawData = fs.readFileSync(`${fullPath}/${descriptorFile}`, 'utf8');
+      // const descriptorData: IDescriptor = JSON.parse(rawData);     
+      const descriptorData = await loadJSModule<IDescriptor>(`${fullPath}/${descriptorFile}`);
       nodeComplete.contentSettings = descriptorData as IDescriptor;
     }
 
