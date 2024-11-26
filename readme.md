@@ -14,10 +14,6 @@ As projects grow, it's common for their structure to become chaotic, leading to 
 
 ### **¿Why HomeostasisJS?**
 
-- **Dificultad para encontrar archivos.**
-- **Altos costos de mantenimiento.**
-- **Curvas de aprendizaje más largas para nuevos desarrolladores.**
-
 HomeostasisJS addresses these issues by allowing you to define project conventions early on and ensuring they are automatically enforced. This creates a system of **negative feedback** within your projects, reducing entropy and fostering a more structured and consistent architecture.
 
 - **📁 Maintain Order:** Prevent the chaos that naturally arises as your codebase expands.
@@ -39,26 +35,26 @@ npm install -g homeostasis
 const config = {
   directories: {
     strict_content: false,
-    convention: "pascal-case",
+    convention: "kebab-case",
     ignore: ["dist"],
     content: [
       {
-        name: "Components",
+        name: "components",
         motivation:
           "Encapsulate reusable UI elements to promote modularity and consistency across the application",
       },
       {
-        name: "Services",
+        name: "services",
         motivation:
           "Handle business logic and external API interactions, ensuring a clean separation of concerns.",
       },
       {
-        name: "Repositories",
+        name: "repositories",
         motivation:
           "Manage data access and storage, acting as a bridge between the application and its data sources.",
       },
       {
-        name: "Utils",
+        name: "utils",
         motivation:
           "Provide utility functions and helpers to streamline common operations and avoid code duplication.",
       },
