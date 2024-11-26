@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { IDescriptor, INode } from "../models/";
 import { descriptorFile, existsInDirectory } from "./DescriptorService";
 import { getStats, readDirectory } from "./FileSystemService";
-import * as Logger from "../utils/Logger";
+import * as Logger from "../utils/logger/Logger";
 
 const createNode = async (
   fileName: string,
@@ -35,7 +35,7 @@ const createNode = async (
     return nodeComplete;
 
   } catch (error: any) {
-    Logger.error(error.message)
+    Logger.sendLog(error.message)
   }
   return null;
 };

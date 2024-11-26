@@ -1,6 +1,6 @@
 {
   "name": "homeostasis",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Library for keep entriopy under control",
   "main": "dist/index.js",
   "bin": {
@@ -27,6 +27,5 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "fast-glob": "^3.3.2"
   }
 }
