@@ -26,9 +26,7 @@ const createNode = async (
       contentSettings: {} as IDescriptor
     };   
 
-    if (isDirectory && isIterable) {
-      // const rawData = fs.readFileSync(`${fullPath}/${descriptorFile}`, 'utf8');
-      // const descriptorData: IDescriptor = JSON.parse(rawData);     
+    if (isDirectory && isIterable) {   
       const descriptorData = await loadJSModule<IDescriptor>(`${fullPath}/${descriptorFile}`);
       nodeComplete.contentSettings = descriptorData as IDescriptor;
     }
