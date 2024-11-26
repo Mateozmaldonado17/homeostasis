@@ -2,7 +2,6 @@
 
 "use strict";
 import * as Logger from "./utils/logger/Logger";
-import * as fs from "fs";
 import { IDescriptor, INode } from "./models";
 import {
   descriptorFile,
