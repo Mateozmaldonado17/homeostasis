@@ -34,7 +34,7 @@ const validateRequiredContent = (
 
       if (!includeContentInMappedContent) {
         const response: IResponse = {
-          message: `The ${isDirectoryOrFile} in "${root}" (${content}) is essential in the source.`,
+          message: `The ${isDirectoryOrFile} "${content}" located at "${root}" is essential for the source.`,
           logType: SystemLogTypeEnum.ERROR,
           fullpath: root,
           name: content,

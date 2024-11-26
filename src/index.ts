@@ -15,6 +15,7 @@ import { strictContentValidator, validateRequiredContent } from "./services/vali
 import validateNamingConventions from "./services/validation-service/validators/validate-naming-conventions";
 import { SystemLogTypeEnum } from "./enums";
 import IResponse from "./models/IResponse";
+import checkFileFormatCompliance from "./services/validation-service/validators/check-file-format-compliance";
 
 const globalResponses: IResponse[] = [];
 
@@ -63,13 +64,14 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   if (conventionValidationResult.responses.length)
     globalResponses.push(...conventionValidationResult.responses);
 
-  // const formatValidationResult = formatValidation(
-  //   contents,
-  //   contentSetting as IDescriptor
-  // );
+  const formatValidationResult = checkFileFormatCompliance(
+    contents,
+    contentSetting as IDescriptor
+  );
 
-  // if (formatValidationResult.errors.length)
-  //   globalResponses.push(...formatValidationResult.errors);
+  if (formatValidationResult.responses.length)
+    globalResponses.push(...formatValidationResult.responses);
+
 };
 
 async function main(dest: string): Promise<void> {
