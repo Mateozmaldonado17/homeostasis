@@ -1,6 +1,7 @@
 import * as fs from "fs";
-import { INode } from "../models";
-import { createNode } from "./NodeService";
+import { createNode } from "../node-service/node-service";
+import { INode } from "../../models";
+
 
 const getStats = async (path: string) => {
   return fs.promises.stat(path);

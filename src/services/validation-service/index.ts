@@ -1,4 +1,13 @@
-import strictContentValidator from "./validators/strict-content-validator";
-import validateRequiredContent from "./validators/validate-required-content";
+import {
+  strictContentValidator,
+  validateRequiredContent,
+  checkFileFormatCompliance,
+  validateNamingConventions,
+} from "./validators";
 
-export { strictContentValidator,validateRequiredContent };
+export {
+  strictContentValidator,
+  validateRequiredContent,
+  checkFileFormatCompliance,
+  validateNamingConventions,
+};

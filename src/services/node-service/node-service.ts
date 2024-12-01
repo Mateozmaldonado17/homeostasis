@@ -1,7 +1,7 @@
-import { IDescriptor, INode } from "../models/";
-import { descriptorFile, existsInDirectory, loadJSModule } from "./descriptor-service/descriptor-service";
-import { getStats, readDirectory } from "./FileSystemService";
-import { sendLog } from "../utils/logger";
+import { IDescriptor, INode } from "../../models";
+import { descriptorFile, existsInDirectory, loadJSModule } from "../descriptor-service/descriptor-service";
+import { sendLog } from "../../utils/logger";
+import { getStats, readDirectory } from "../file-system-service";
 
 const createNode = async (
   fileName: string,

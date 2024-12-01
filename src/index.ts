@@ -8,13 +8,13 @@ import {
   existsInDirectory,
   loadJSModule,
 } from "./services/descriptor-service/descriptor-service";
-import { readDirectory } from "./services/FileSystemService";
-import { traverseNodes } from "./services/NodeService";
+import { traverseNodes } from "./services/node-service/node-service";
 import { strictContentValidator, validateRequiredContent } from "./services/validation-service";
 import validateNamingConventions from "./services/validation-service/validators/validate-naming-conventions";
 import IResponse from "./models/IResponse";
 import checkFileFormatCompliance from "./services/validation-service/validators/check-file-format-compliance";
 import { sendLog } from "./utils/logger";
+import { readDirectory } from "./services/file-system-service";
 
 const globalResponses: IResponse[] = [];
 
