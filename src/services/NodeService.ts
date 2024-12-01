@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { IDescriptor, INode } from "../models/";
-import { descriptorFile, existsInDirectory, loadJSModule } from "./DescriptorService";
+import { descriptorFile, existsInDirectory, loadJSModule } from "./descriptor-service/descriptor-service";
 import { getStats, readDirectory } from "./FileSystemService";
 import * as Logger from "../utils/logger/Logger";
 

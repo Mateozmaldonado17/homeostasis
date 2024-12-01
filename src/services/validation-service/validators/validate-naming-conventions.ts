@@ -6,7 +6,7 @@ import { isCamelCase, toCamelCase } from "../../../utils/CamelCase";
 import { isKebabCase, toKebabCase } from "../../../utils/KebabCase";
 import { isPascalCase, toPascalCase } from "../../../utils/PascalCase";
 import { isSnakeCase, toSnakeCase } from "../../../utils/SnakeCase";
-import { descriptorFile } from "../../DescriptorService";
+import { descriptorFile } from "../../descriptor-service/descriptor-service";
 import {
   DefaultBaseToRun,
   IProcessFileCallback,

@@ -2,7 +2,7 @@ import { SystemLogTypeEnum } from "../../../enums";
 import { IDescriptor, INode } from "../../../models";
 import IResponse from "../../../models/IResponse";
 import extractFileFormat from "../../../utils/ExtractFileFormat";
-import { descriptorFile } from "../../DescriptorService";
+import { descriptorFile } from "../../descriptor-service/descriptor-service";
 import {
   FileTypeArray,
   IProcessFileCallback,

@@ -7,7 +7,7 @@ import {
   descriptorFile,
   existsInDirectory,
   loadJSModule,
-} from "./services/DescriptorService";
+} from "./services/descriptor-service/descriptor-service";
 import { readDirectory } from "./services/FileSystemService";
 import { traverseNodes } from "./services/NodeService";
 import { strictContentValidator, validateRequiredContent } from "./services/validation-service";
