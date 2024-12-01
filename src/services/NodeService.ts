@@ -1,8 +1,7 @@
-import * as fs from "fs";
 import { IDescriptor, INode } from "../models/";
 import { descriptorFile, existsInDirectory, loadJSModule } from "./descriptor-service/descriptor-service";
 import { getStats, readDirectory } from "./FileSystemService";
-import * as Logger from "../utils/logger/Logger";
+import { sendLog } from "../utils/logger";
 
 const createNode = async (
   fileName: string,
@@ -34,7 +33,7 @@ const createNode = async (
     return nodeComplete;
 
   } catch (error: any) {
-    Logger.sendLog(error.message)
+    sendLog(error.message)
   }
   return null;
 };

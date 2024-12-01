@@ -1,12 +1,9 @@
 import { SystemLogTypeEnum } from "../../../enums";
 import { IDescriptor, INode } from "../../../models";
 import IResponse from "../../../models/IResponse";
-import extractFileFormat from "../../../utils/ExtractFileFormat";
+import { extractFileFormat } from "../../../utils/file";
 import { descriptorFile } from "../../descriptor-service/descriptor-service";
-import {
-  FileTypeArray,
-  IProcessFileCallback,
-} from "../models/ValidationTypes";
+import { FileTypeArray, IProcessFileCallback } from "../models/ValidationTypes";
 import { processFileTypes } from "../processors";
 
 const checkFileFormatCompliance = (
@@ -29,7 +26,11 @@ const checkFileFormatCompliance = (
       const getFileFormat = extractFileFormat(content.name);
       if (!formatFiles.includes(getFileFormat)) {
         const response: IResponse = {
-          message: `The file "${content.name}" located in "${content.fullDestination}" has an unsupported format (${getFileFormat}). Allowed formats for this folder are: ${formatFiles.join(", ")}.`,
+          message: `The file "${content.name}" located in "${
+            content.fullDestination
+          }" has an unsupported format (${getFileFormat}). Allowed formats for this folder are: ${formatFiles.join(
+            ", "
+          )}.`,
           logType: SystemLogTypeEnum.ERROR,
           fullpath: content.fullDestination,
           name: content.name,

@@ -1,6 +1,5 @@
 import { SystemLogTypeEnum } from "../../enums";
 import IResponse from "../../models/IResponse";
-
 const reset = "\x1b[0m";
 
 const getLogFormatted = (props: IResponse): string => {
@@ -40,9 +39,4 @@ const getLogFormatted = (props: IResponse): string => {
   return `${backgroundColor}${textColor}[${errorTypeFormatted}]${reset}: ${message}`;
 };
 
-const sendLog = (props: Partial<IResponse>): void => {
-  const formattedMessage = getLogFormatted(props as IResponse);
-  console.log(formattedMessage);
-};
-
-export { getLogFormatted, sendLog };
+export default getLogFormatted;

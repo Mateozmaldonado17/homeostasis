@@ -2,10 +2,8 @@ import { SystemLogTypeEnum } from "../../../enums";
 import { IDescriptor, INode } from "../../../models";
 import { ConventionList } from "../../../models/IDescriptor";
 import IResponse from "../../../models/IResponse";
-import { isCamelCase, toCamelCase } from "../../../utils/CamelCase";
-import { isKebabCase, toKebabCase } from "../../../utils/KebabCase";
-import { isPascalCase, toPascalCase } from "../../../utils/PascalCase";
-import { isSnakeCase, toSnakeCase } from "../../../utils/SnakeCase";
+import { isCamelCase, isKebabCase, isPascalCase, isSnakeCase, toCamelCase, toKebabCase, toPascalCase, toSnakeCase } from "../../../utils/string";
+
 import { descriptorFile } from "../../descriptor-service/descriptor-service";
 import {
   DefaultBaseToRun,

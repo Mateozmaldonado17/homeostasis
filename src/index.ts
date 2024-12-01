@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 "use strict";
-import * as Logger from "./utils/logger/Logger";
+
 import { IDescriptor, INode } from "./models";
 import {
   descriptorFile,
@@ -14,6 +14,7 @@ import { strictContentValidator, validateRequiredContent } from "./services/vali
 import validateNamingConventions from "./services/validation-service/validators/validate-naming-conventions";
 import IResponse from "./models/IResponse";
 import checkFileFormatCompliance from "./services/validation-service/validators/check-file-format-compliance";
+import { sendLog } from "./utils/logger";
 
 const globalResponses: IResponse[] = [];
 
@@ -96,7 +97,7 @@ async function main(dest: string): Promise<void> {
   } catch (response: any) {
     console.log(response.message);
     globalResponses.map((response: IResponse) => {
-      Logger.sendLog({ logType: response.logType, message: response.message });
+      sendLog({ logType: response.logType, message: response.message });
     });
   }
 }
