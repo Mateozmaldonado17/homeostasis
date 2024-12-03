@@ -18,8 +18,10 @@ import { descriptorFile } from "../../descriptor-service/descriptor-service";
 import {
   DefaultBaseToRun,
   IProcessFileCallback,
+  IProcessFileTypeProps,
+  IProcessNodesCallback,
 } from "../models/ValidationTypes";
-import { processFileTypes } from "../processors";
+import { processFileTypes, processNodes } from "../processors";
 
 const validateNamingConventions = (
   contents: INode[],
@@ -34,12 +36,36 @@ const validateNamingConventions = (
   };
 
   processFileTypes(configRunningBase, (returnProps: IProcessFileCallback) => {
-    const { isDirectoryOrFile, filteredMappedContent, conventionFormat } =
-      returnProps;
+    const {
+      isDirectoryOrFile,
+      filteredMappedContent,
+      conventionFormat,
+      currentType
+    } = returnProps;
+
+    const staticContent = contentSetting?.[currentType].content;
+    const fileNames = staticContent?.map((typeFile) => typeFile.name);
+
+    fileNames?.forEach((fileName: string) => {
+      const { isValid, suggestedName } = validateAndSuggestNamingConvention(
+        fileName,
+        conventionFormat as ConventionList
+      );
+  
+      if (!isValid) {
+        const response: IResponse = {
+          message: `The ${isDirectoryOrFile} "${fileName}" does not follow the "${(conventionFormat as string).toLowerCase()}" naming convention in descriptor file. It should be renamed to "${suggestedName}".`,
+          logType: SystemLogTypeEnum.FATAL,
+          fullpath: "",
+          name: fileName,
+        };
+        responses.push(response);
+      }
+    })
 
     filteredMappedContent.forEach((content) => {
       const name = content.name;
-      if (content.name === descriptorFile) return false;
+      if (name === descriptorFile) return false;
 
       const { isValid, suggestedName } = validateAndSuggestNamingConvention(
         name,
