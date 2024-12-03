@@ -2,7 +2,17 @@ import { SystemLogTypeEnum } from "../../../enums";
 import { IDescriptor, INode } from "../../../models";
 import { ConventionList } from "../../../models/IDescriptor";
 import IResponse from "../../../models/IResponse";
-import { isCamelCase, isKebabCase, isPascalCase, isSnakeCase, toCamelCase, toKebabCase, toPascalCase, toSnakeCase } from "../../../utils/string";
+import {
+  isCamelCase,
+  isKebabCase,
+  isPascalCase,
+  isSnakeCase,
+  toCamelCase,
+  toKebabCase,
+  toPascalCase,
+  toSnakeCase,
+  validateAndSuggestNamingConvention,
+} from "../../../utils/string";
 
 import { descriptorFile } from "../../descriptor-service/descriptor-service";
 import {
@@ -28,44 +38,21 @@ const validateNamingConventions = (
       returnProps;
 
     filteredMappedContent.forEach((content) => {
+      const name = content.name;
       if (content.name === descriptorFile) return false;
 
-      let isValid = true;
-      let suggestedName = "";
-
-      switch (conventionFormat) {
-        case ConventionList.CamelCase:
-          isValid = isCamelCase(content.name);
-          suggestedName = toCamelCase(content.name);
-          break;
-        case ConventionList.PascalCase:
-          isValid = isPascalCase(content.name);
-          suggestedName = toPascalCase(content.name);
-          break;
-        case ConventionList.SnakeCase:
-          isValid = isSnakeCase(content.name);
-          suggestedName = toSnakeCase(content.name);
-          break;
-        case ConventionList.KebabCase:
-          isValid = isKebabCase(content.name);
-          suggestedName = toKebabCase(content.name);
-          break;
-        default:
-          const response: IResponse = {
-            message: `The convention "${conventionFormat}" could not be applied to the file "${content.name}" located at "${content.fullDestination}".`,
-            logType: SystemLogTypeEnum.FATAL,
-            fullpath: content.fullDestination,
-            name: content.name,
-          };
-          responses.push(response);
-          return;
-      }
+      const { isValid, suggestedName } = validateAndSuggestNamingConvention(
+        name,
+        conventionFormat as ConventionList
+      );
 
       if (!isValid) {
         const response: IResponse = {
           message: `The ${isDirectoryOrFile} "${content.name}" located at "${
             content.fullDestination
-          }" does not follow the ${conventionFormat.toLowerCase()} convention. It should be renamed to "${suggestedName}".`,
+          }" does not follow the ${(
+            conventionFormat as string
+          ).toLowerCase()} convention. It should be renamed to "${suggestedName}".`,
           logType: SystemLogTypeEnum.ERROR,
           fullpath: content.fullDestination,
           name: content.name,
