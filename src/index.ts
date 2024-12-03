@@ -55,7 +55,7 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   if (contentValidationResult.responses.length)
     globalResponses.push(...contentValidationResult.responses);
 
-  const conventionValidationResult = validateNamingConventions(
+  const conventionValidationResult = await validateNamingConventions(
     contents,
     contentSetting as IDescriptor
   );

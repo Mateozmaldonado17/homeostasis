@@ -13,6 +13,7 @@ export interface IDescriptorItem {
   ignore: string[],
   allowedFormats: string[],
   content: IContent[];
+  autoFormatting: boolean;
 }
 
 interface IDescriptor {
