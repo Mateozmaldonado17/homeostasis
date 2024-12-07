@@ -18,7 +18,8 @@ interface IProcessFileCallback {
   descriptorContent: string[] | undefined;
   ignoredFiles: string[] | undefined;
   conventionFormat: ConventionList | undefined
-  formatFiles: string[]
+  formatFiles: string[],
+  removeIfFormatIsInvalid: boolean
 }
 
 interface IProcessFileTypeProps {

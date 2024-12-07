@@ -7,6 +7,7 @@ const processFileTypes = (
 ): void => {
   const { fileType, contentSetting, contents } = props;
   const formatFiles = contentSetting.files.allowedFormats || [];
+  const removeIfFormatIsInvalid = contentSetting.files.removeIfFormatIsInvalid;
 
   fileType.forEach((currentType: string) => {
     const conventionFormat = contentSetting?.[currentType].convention;
@@ -37,7 +38,8 @@ const processFileTypes = (
       filteredMappedContent,
       descriptorContent,
       conventionFormat,
-      formatFiles
+      formatFiles,
+      removeIfFormatIsInvalid
     });
   });
 };

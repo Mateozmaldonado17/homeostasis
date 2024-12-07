@@ -8,6 +8,7 @@ export enum ConventionList {
 }
 
 export interface IDescriptorItem {
+  removeIfFormatIsInvalid: boolean;
   convention: ConventionList;
   strict_content: boolean;
   ignore: string[],

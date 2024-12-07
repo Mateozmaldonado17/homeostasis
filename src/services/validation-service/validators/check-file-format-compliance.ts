@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import { SystemLogTypeEnum } from "../../../enums";
 import { IDescriptor, INode } from "../../../models";
 import IResponse from "../../../models/IResponse";
@@ -19,12 +20,27 @@ const checkFileFormatCompliance = (
   };
 
   processFileTypes(configRunningBase, (returnProps: IProcessFileCallback) => {
-    const { filteredMappedContent, formatFiles } = returnProps;
+    const { filteredMappedContent, formatFiles, removeIfFormatIsInvalid } = returnProps;
 
     filteredMappedContent.forEach((content) => {
       if (content.name === descriptorFile) return false;
       const getFileFormat = extractFileFormat(content.name);
-      if (!formatFiles.includes(getFileFormat)) {
+      const fileHasInvalidFormat = !formatFiles.includes(getFileFormat);
+
+      if (fileHasInvalidFormat && removeIfFormatIsInvalid) {
+        fs.unlinkSync(content.fullDestination);
+        const response: IResponse = {
+          message: `The file "${content.name}" located in "${
+            content.fullDestination
+          }" has an unsupported format (${getFileFormat}), this file has been removed.`,
+          logType: SystemLogTypeEnum.SUCCESS,
+          fullpath: content.fullDestination,
+          name: content.name,
+        };
+        responses.push(response);
+      }
+
+      if (fileHasInvalidFormat && !removeIfFormatIsInvalid) {
         const response: IResponse = {
           message: `The file "${content.name}" located in "${
             content.fullDestination
@@ -37,6 +53,7 @@ const checkFileFormatCompliance = (
         };
         responses.push(response);
       }
+
     });
   });
 
