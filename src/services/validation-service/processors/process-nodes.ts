@@ -15,6 +15,8 @@ const processNodes = (
 
   const staticContent = contentSetting?.[currentType].content;
   const isStrictContent = contentSetting?.[currentType].strict_content;
+  const purgeOnStrict = contentSetting?.[currentType].purgeOnStrict;
+
   const fileNames = staticContent?.map((typeFile) => typeFile.name);
 
   contents.forEach((content: INode) => {
@@ -33,6 +35,7 @@ const processNodes = (
       staticContent,
       isStrictContent,
       fileNames,
+      purgeOnStrict
     };
 
     callback(callbackProps);

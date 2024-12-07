@@ -15,6 +15,7 @@ export interface IDescriptorItem {
   allowedFormats: string[],
   content: IContent[];
   autoFormatting: boolean;
+  purgeOnStrict: boolean;
 }
 
 interface IDescriptor {

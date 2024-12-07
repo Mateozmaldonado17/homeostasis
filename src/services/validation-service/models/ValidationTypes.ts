@@ -31,9 +31,10 @@ interface IProcessFileTypeProps {
 interface IProcessNodesCallback {
   content: INode;
   ignoredFiles: string[];
-  staticContent: IContent[] | undefined;
-  isStrictContent: boolean | undefined;
-  fileNames: string[] | undefined;
+  staticContent?: IContent[];
+  isStrictContent?: boolean;
+  fileNames?: string[];
+  purgeOnStrict?: boolean;
 }
 
 export {
