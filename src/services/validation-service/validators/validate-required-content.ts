@@ -1,7 +1,7 @@
-import { extractDirectoryStructure } from "../../..";
 import { SystemLogTypeEnum } from "../../../enums";
-import { IDescriptor, INode } from "../../../models";
+import { INode } from "../../../models";
 import IResponse from "../../../models/IResponse";
+import { extractDirectoryStructure } from "../../file-system-service";
 import {
   DefaultBaseToRun,
   IProcessFileCallback,

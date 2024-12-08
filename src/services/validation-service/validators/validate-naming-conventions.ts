@@ -1,13 +1,11 @@
 const fs = require("fs").promises;
 const path = require("path");
-import { extractDirectoryStructure } from "../../..";
 import { SystemLogTypeEnum } from "../../../enums";
-import { IDescriptor, INode } from "../../../models";
 import { ConventionList } from "../../../models/IDescriptor";
 import IResponse from "../../../models/IResponse";
 import { validateAndSuggestNamingConvention } from "../../../utils/string";
-
 import { descriptorFile } from "../../descriptor-service/descriptor-service";
+import { extractDirectoryStructure } from "../../file-system-service";
 import {
   DefaultBaseToRun,
   IProcessFileCallback,

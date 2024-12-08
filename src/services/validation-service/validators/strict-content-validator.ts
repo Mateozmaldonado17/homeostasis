@@ -9,7 +9,7 @@ import {
   IProcessNodesCallback,
 } from "../models/ValidationTypes";
 import { processFileTypes, processNodes } from "../processors";
-import { extractDirectoryStructure } from "../../..";
+import { extractDirectoryStructure } from "../../file-system-service";
 
 const strictContentValidator = async (
   dest: string
@@ -18,7 +18,7 @@ const strictContentValidator = async (
 
   const responses: IResponse[] = [];
   const configRunningBase = {
-    fileType: DefaultBaseToRun,
+    fileType: DefaultBaseToRun, 
     contentSettings,
     contents,
   };

@@ -18,16 +18,6 @@ import { readDirectory } from "./services/file-system-service";
 
 const globalResponses: IResponse[] = [];
 
-export const extractDirectoryStructure = async (dest: string): Promise<{ contents: INode[], contentSettings: IDescriptor }> => {
-  const rootNode: INode[] = await readDirectory(dest);
-  await traverseNodes(rootNode);
-  const data = await loadJSModule<IDescriptor>(`${dest}/${descriptorFile}`);
-  return {
-    contents: rootNode,
-    contentSettings: data,
-  };
-}
-
 const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   const contents = mainNode.content as INode[];
 

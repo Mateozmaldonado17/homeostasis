@@ -6,7 +6,7 @@ import { extractFileFormat } from "../../../utils/file";
 import { descriptorFile } from "../../descriptor-service/descriptor-service";
 import { FileTypeArray, IProcessFileCallback } from "../models/ValidationTypes";
 import { processFileTypes } from "../processors";
-import { extractDirectoryStructure } from "../../..";
+import { extractDirectoryStructure } from "../../file-system-service";
 
 const checkFileFormatCompliance = async (
   dest: string
