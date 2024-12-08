@@ -18,8 +18,6 @@ import { readDirectory } from "./services/file-system-service";
 
 const globalResponses: IResponse[] = [];
 
-
-
 export const extractDirectoryStructure = async (dest: string): Promise<{ contents: INode[], contentSettings: IDescriptor }> => {
   const rootNode: INode[] = await readDirectory(dest);
   await traverseNodes(rootNode);
@@ -55,11 +53,7 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   if (strictContentResult.responses.length)
     globalResponses.push(...strictContentResult.responses);
 
-  const contentValidationResult = validateRequiredContent(
-    contents,
-    contentSetting as IDescriptor,
-    fullDestination as string
-  );
+  const contentValidationResult = await validateRequiredContent(fullDestination as string);
 
   if (contentValidationResult.responses.length)
     globalResponses.push(...contentValidationResult.responses);
@@ -69,10 +63,7 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   if (conventionValidationResult.responses.length)
     globalResponses.push(...conventionValidationResult.responses);
 
-  const formatValidationResult = checkFileFormatCompliance(
-    contents,
-    contentSetting as IDescriptor
-  );
+  const formatValidationResult = await checkFileFormatCompliance(fullDestination as string);
 
   if (formatValidationResult.responses.length)
     globalResponses.push(...formatValidationResult.responses);

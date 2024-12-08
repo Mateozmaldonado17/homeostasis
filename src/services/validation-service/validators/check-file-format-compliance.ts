@@ -6,11 +6,12 @@ import { extractFileFormat } from "../../../utils/file";
 import { descriptorFile } from "../../descriptor-service/descriptor-service";
 import { FileTypeArray, IProcessFileCallback } from "../models/ValidationTypes";
 import { processFileTypes } from "../processors";
+import { extractDirectoryStructure } from "../../..";
 
-const checkFileFormatCompliance = (
-  contents: INode[],
-  contentSettings: IDescriptor
+const checkFileFormatCompliance = async (
+  dest: string
 ) => {
+  const { contentSettings, contents } = await extractDirectoryStructure(dest);
   const responses: IResponse[] = [];
 
   const configRunningBase = {

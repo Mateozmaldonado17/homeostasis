@@ -1,3 +1,4 @@
+import { extractDirectoryStructure } from "../../..";
 import { SystemLogTypeEnum } from "../../../enums";
 import { IDescriptor, INode } from "../../../models";
 import IResponse from "../../../models/IResponse";
@@ -7,11 +8,10 @@ import {
 } from "../models/ValidationTypes";
 import { processFileTypes } from "../processors";
 
-const validateRequiredContent = (
-  contents: INode[],
-  contentSettings: IDescriptor,
-  root: string
+const validateRequiredContent = async (
+  dest: string
 ) => {
+  const { contentSettings, contents } = await extractDirectoryStructure(dest);
   const responses: IResponse[] = [];
 
   const configRunningBase = {
@@ -36,9 +36,9 @@ const validateRequiredContent = (
 
       if (!includeContentInMappedContent) {
         const response: IResponse = {
-          message: `The ${isDirectoryOrFile} "${content}" located at "${root}" is essential for the source.`,
+          message: `The ${isDirectoryOrFile} "${content}" located at "${dest}" is essential for the source.`,
           logType: SystemLogTypeEnum.ERROR,
-          fullpath: root,
+          fullpath: dest,
           name: content,
         };
         responses.push(response);
