@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
+import { extractDirectoryStructure } from "../../..";
 import { SystemLogTypeEnum } from "../../../enums";
 import { IDescriptor, INode } from "../../../models";
 import { ConventionList } from "../../../models/IDescriptor";
@@ -14,14 +15,14 @@ import {
 import { processFileTypes } from "../processors";
 
 const validateNamingConventions = async (
-  contents: INode[],
-  contentSetting: IDescriptor
+  dest: string
 ) => {
+  const { contentSettings, contents } = await extractDirectoryStructure(dest);
   const responses: IResponse[] = [];
 
   const configRunningBase = {
     fileType: DefaultBaseToRun,
-    contentSetting,
+    contentSettings,
     contents,
   };
 
@@ -33,8 +34,8 @@ const validateNamingConventions = async (
       currentType,
     } = returnProps;
 
-    const staticContent = contentSetting?.[currentType].content;
-    const autoFormatting = contentSetting?.[currentType].autoFormatting;
+    const staticContent = contentSettings?.[currentType].content;
+    const autoFormatting = contentSettings?.[currentType].autoFormatting;
     const fileNames = staticContent?.map((typeFile) => typeFile.name);
 
     fileNames?.forEach((fileName: string) => {

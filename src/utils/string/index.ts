@@ -1,9 +1,9 @@
 import { isCamelCase, toCamelCase } from "./camel-case";
+import { isValidRegex, validateWithRegex } from "./regex-functions";
 import { isKebabCase, toKebabCase } from "./kebab-case";
 import { isPascalCase, toPascalCase } from "./pascal-case";
 import { isSnakeCase, toSnakeCase } from "./snake-case";
 import { validateAndSuggestNamingConvention } from "./validate-and-suggest-naming-convention";
-
 export {
     validateAndSuggestNamingConvention,
     isCamelCase,
@@ -13,5 +13,7 @@ export {
     isPascalCase,
     toPascalCase,
     isSnakeCase,
-    toSnakeCase
+    toSnakeCase,
+    isValidRegex,
+    validateWithRegex
 }

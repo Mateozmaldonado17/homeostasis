@@ -8,14 +8,14 @@ const processNodes = (
   props: IProcessFileTypeProps,
   callback: (props: IProcessNodesCallback) => void
 ): void => {
-  const { contents, contentSetting, currentType } = props;
+  const { contents, contentSettings, currentType } = props;
   
-  const ignoredFiles: string[] = contentSetting?.files.ignore;
-  const ignoredDirectories = contentSetting?.directories.ignore;
+  const ignoredFiles: string[] = contentSettings?.files.ignore;
+  const ignoredDirectories = contentSettings?.directories.ignore;
 
-  const staticContent = contentSetting?.[currentType].content;
-  const isStrictContent = contentSetting?.[currentType].strict_content;
-  const purgeOnStrict = contentSetting?.[currentType].purgeOnStrict;
+  const staticContent = contentSettings?.[currentType].content;
+  const isStrictContent = contentSettings?.[currentType].strict_content;
+  const purgeOnStrict = contentSettings?.[currentType].purgeOnStrict;
 
   const fileNames = staticContent?.map((typeFile) => typeFile.name);
 

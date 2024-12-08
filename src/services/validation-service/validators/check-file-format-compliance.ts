@@ -9,13 +9,13 @@ import { processFileTypes } from "../processors";
 
 const checkFileFormatCompliance = (
   contents: INode[],
-  contentSetting: IDescriptor
+  contentSettings: IDescriptor
 ) => {
   const responses: IResponse[] = [];
 
   const configRunningBase = {
     fileType: ["files"] as FileTypeArray,
-    contentSetting,
+    contentSettings,
     contents,
   };
 

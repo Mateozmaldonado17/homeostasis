@@ -5,15 +5,15 @@ const processFileTypes = (
   props: IBase,
   callback: (returnProps: IProcessFileCallback) => void
 ): void => {
-  const { fileType, contentSetting, contents } = props;
-  const formatFiles = contentSetting.files.allowedFormats || [];
-  const removeIfFormatIsInvalid = contentSetting.files.removeIfFormatIsInvalid;
+  const { fileType, contentSettings, contents } = props;
+  const formatFiles = contentSettings.files.allowedFormats || [];
+  const removeIfFormatIsInvalid = contentSettings.files.removeIfFormatIsInvalid;
 
   fileType.forEach((currentType: string) => {
-    const conventionFormat = contentSetting?.[currentType].convention;
-    const ignoredFiles = contentSetting?.[currentType].ignore;
+    const conventionFormat = contentSettings?.[currentType].convention as string;
+    const ignoredFiles = contentSettings?.[currentType].ignore;
 
-    const descriptorContent: string[] | undefined = contentSetting?.[
+    const descriptorContent: string[] | undefined = contentSettings?.[
       currentType
     ].content?.map((content) => content.name);
 

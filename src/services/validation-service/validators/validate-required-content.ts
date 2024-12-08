@@ -9,15 +9,17 @@ import { processFileTypes } from "../processors";
 
 const validateRequiredContent = (
   contents: INode[],
-  contentSetting: IDescriptor,
+  contentSettings: IDescriptor,
   root: string
 ) => {
   const responses: IResponse[] = [];
+
   const configRunningBase = {
     fileType: DefaultBaseToRun,
-    contentSetting,
+    contentSettings,
     contents,
   };
+
   const processFileTypesCallback = (returnProps: IProcessFileCallback) => {
     const {
       isDirectoryOrFile,

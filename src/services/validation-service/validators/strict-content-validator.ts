@@ -9,22 +9,26 @@ import {
   IProcessNodesCallback,
 } from "../models/ValidationTypes";
 import { processFileTypes, processNodes } from "../processors";
+import { extractDirectoryStructure } from "../../..";
 
-const strictContentValidator = (
-  contentSetting: IDescriptor,
-  contents: INode[]
+const strictContentValidator = async (
+  dest: string
 ) => {
+  const { contentSettings, contents } = await extractDirectoryStructure(dest);
+
   const responses: IResponse[] = [];
   const configRunningBase = {
     fileType: DefaultBaseToRun,
-    contentSetting,
+    contentSettings,
     contents,
   };
+
   const processFileTypesCallback = (returnProps: IProcessFileCallback) => {
     const { isDirectoryOrFile, currentType } = returnProps;
+
     const processNodesProps: IProcessFileTypeProps = {
       contents,
-      contentSetting,
+      contentSettings,
       currentType,
     };
     const processNodesCallback = (filesProps: IProcessNodesCallback) => {

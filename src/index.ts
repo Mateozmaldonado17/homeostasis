@@ -18,6 +18,18 @@ import { readDirectory } from "./services/file-system-service";
 
 const globalResponses: IResponse[] = [];
 
+
+
+export const extractDirectoryStructure = async (dest: string): Promise<{ contents: INode[], contentSettings: IDescriptor }> => {
+  const rootNode: INode[] = await readDirectory(dest);
+  await traverseNodes(rootNode);
+  const data = await loadJSModule<IDescriptor>(`${dest}/${descriptorFile}`);
+  return {
+    contents: rootNode,
+    contentSettings: data,
+  };
+}
+
 const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   const contents = mainNode.content as INode[];
 
@@ -38,10 +50,7 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
     }
   }
 
-  const strictContentResult = strictContentValidator(
-    contentSetting as IDescriptor,
-    contents
-  );
+  const strictContentResult = await strictContentValidator(fullDestination as string);
 
   if (strictContentResult.responses.length)
     globalResponses.push(...strictContentResult.responses);
@@ -55,10 +64,7 @@ const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
   if (contentValidationResult.responses.length)
     globalResponses.push(...contentValidationResult.responses);
 
-  const conventionValidationResult = await validateNamingConventions(
-    contents,
-    contentSetting as IDescriptor
-  );
+  const conventionValidationResult = await validateNamingConventions(fullDestination as string);
 
   if (conventionValidationResult.responses.length)
     globalResponses.push(...conventionValidationResult.responses);

@@ -7,7 +7,7 @@ const DefaultBaseToRun: FileTypeArray = ["files", "directories"];
 
 interface IBase {
   fileType: FileTypeArray;
-  contentSetting: IDescriptor
+  contentSettings: IDescriptor
   contents: INode[];
 }
 
@@ -15,16 +15,16 @@ interface IProcessFileCallback {
   currentType: string;
   isDirectoryOrFile: string;
   filteredMappedContent: INode[];
-  descriptorContent: string[] | undefined;
-  ignoredFiles: string[] | undefined;
-  conventionFormat: ConventionList | undefined
+  descriptorContent?: string[];
+  ignoredFiles?: string[];
+  conventionFormat?: ConventionList | string
   formatFiles: string[],
   removeIfFormatIsInvalid: boolean
 }
 
 interface IProcessFileTypeProps {
   contents: INode[];
-  contentSetting: IDescriptor;
+  contentSettings: IDescriptor;
   currentType: string;
 }
 
