@@ -2,63 +2,16 @@
 
 "use strict";
 
-import { IDescriptor, INode } from "./models";
+import { INode } from "./models";
 import {
-  descriptorFile,
   existsInDirectory,
-  loadJSModule,
 } from "./services/descriptor-service/descriptor-service";
-import { traverseNodes } from "./services/node-service/node-service";
-import { strictContentValidator, validateRequiredContent } from "./services/validation-service";
-import validateNamingConventions from "./services/validation-service/validators/validate-naming-conventions";
 import IResponse from "./models/IResponse";
-import checkFileFormatCompliance from "./services/validation-service/validators/check-file-format-compliance";
 import { sendLog } from "./utils/logger";
-import { readDirectory } from "./services/file-system-service";
+import { extractDirectoryStructure, readDirectory } from "./services/file-system-service";
+import runValidations from "./services/validation-service/runner";
 
 const globalResponses: IResponse[] = [];
-
-const runValidations = async (mainNode: Partial<INode>): Promise<void> => {
-  const contents = mainNode.content as INode[];
-
-  const fullDestination = mainNode.fullDestination;
-
-  const contentSetting = mainNode.contentSettings;
-
-  for (const content of contents) {
-    const ignoredDirectories = contentSetting?.directories.ignore;
-    const ignoredFiles = contentSetting?.files.ignore;
-
-    const thisFileOrDirShouldBeIgnore =
-      ignoredDirectories?.includes(content.name) ||
-      ignoredFiles?.includes(content.name);
-    
-    if (content.isIterable && !thisFileOrDirShouldBeIgnore) {
-      runValidations(content as Partial<INode>);
-    }
-  }
-
-  const strictContentResult = await strictContentValidator(fullDestination as string);
-
-  if (strictContentResult.responses.length)
-    globalResponses.push(...strictContentResult.responses);
-
-  const contentValidationResult = await validateRequiredContent(fullDestination as string);
-
-  if (contentValidationResult.responses.length)
-    globalResponses.push(...contentValidationResult.responses);
-
-  const conventionValidationResult = await validateNamingConventions(fullDestination as string);
-
-  if (conventionValidationResult.responses.length)
-    globalResponses.push(...conventionValidationResult.responses);
-
-  const formatValidationResult = await checkFileFormatCompliance(fullDestination as string);
-
-  if (formatValidationResult.responses.length)
-    globalResponses.push(...formatValidationResult.responses);
-
-};
 
 async function main(dest: string): Promise<void> {
   try {
@@ -67,15 +20,16 @@ async function main(dest: string): Promise<void> {
         "We couldn't find the main descriptor file in this project"
       );
     }
-    const rootNode: INode[] = await readDirectory(dest);
-    await traverseNodes(rootNode);
-    const data = await loadJSModule<IDescriptor>(`${dest}/${descriptorFile}`);
+
+    const { contentSettings, contents } = await extractDirectoryStructure(dest);
+
     const rootNodeRefactored: Partial<INode> = {
-      content: rootNode,
-      contentSettings: data,
+      content: contents,
+      contentSettings: contentSettings,
       fullDestination: dest,
     };
-    await runValidations(rootNodeRefactored);
+
+    await runValidations(rootNodeRefactored, globalResponses);
 
     console.log("[Homeostasis]");
     if (globalResponses.length)
