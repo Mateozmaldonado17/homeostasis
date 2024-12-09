@@ -18,10 +18,15 @@ export interface IDescriptorItem {
   purgeOnStrict: boolean;
 }
 
+interface IPlugin {
+  [hookName: string]: (...args: string[]) => void;
+}
+
 interface IDescriptor {
+  plugins: IPlugin[],
   directories: Omit<IDescriptorItem, "allowedFormats">,
   files: IDescriptorItem,
-  [key: string]: Partial<IDescriptorItem>,
+  [key: string]: Partial<IDescriptorItem> | IPlugin[] | any,
 }
 
 export default IDescriptor;

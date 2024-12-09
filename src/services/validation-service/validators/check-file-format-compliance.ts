@@ -21,7 +21,7 @@ const checkFileFormatCompliance = async (
   };
 
   processFileTypes(configRunningBase, (returnProps: IProcessFileCallback) => {
-    const { filteredMappedContent, formatFiles, removeIfFormatIsInvalid } = returnProps;
+    const { filteredMappedContent, formatFiles, removeIfFormatIsInvalid, executeHook } = returnProps;
 
     filteredMappedContent.forEach((content) => {
       if (content.name === descriptorFile) return false;
@@ -39,6 +39,7 @@ const checkFileFormatCompliance = async (
           name: content.name,
         };
         responses.push(response);
+        executeHook("onRemoveIfFormatIsInvalid", returnProps);
       }
 
       if (fileHasInvalidFormat && !removeIfFormatIsInvalid) {
@@ -53,6 +54,7 @@ const checkFileFormatCompliance = async (
           name: content.name,
         };
         responses.push(response);
+        executeHook("onInvalidFormat", returnProps);
       }
 
     });

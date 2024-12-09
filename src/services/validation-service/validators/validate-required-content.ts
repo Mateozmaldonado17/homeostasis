@@ -26,7 +26,9 @@ const validateRequiredContent = async (
       filteredMappedContent,
       ignoredFiles,
       descriptorContent,
+      executeHook
     } = returnProps;
+
     descriptorContent?.forEach((content) => {
       if (ignoredFiles?.includes(content)) return;
 
@@ -42,6 +44,7 @@ const validateRequiredContent = async (
           name: content,
         };
         responses.push(response);
+        executeHook("onStrictContentValidation", returnProps);
       }
     });
   };

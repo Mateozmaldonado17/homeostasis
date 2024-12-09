@@ -7,6 +7,6 @@
     "strict": true,
     "moduleResolution": "node"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/services/descriptor-service"],
   "exclude": ["node_modules"]
 }

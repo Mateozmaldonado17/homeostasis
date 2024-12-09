@@ -1,8 +1,9 @@
-import { INode } from "../../../models";
+import { IContent, INode } from "../../../models";
 import {
   IProcessFileTypeProps,
   IProcessNodesCallback,
 } from "../models/ValidationTypes";
+
 
 const processNodes = (
   props: IProcessFileTypeProps,
@@ -17,7 +18,7 @@ const processNodes = (
   const isStrictContent = contentSettings?.[currentType].strict_content;
   const purgeOnStrict = contentSettings?.[currentType].purgeOnStrict;
 
-  const fileNames = staticContent?.map((typeFile) => typeFile.name);
+  const fileNames = staticContent?.map((typeFile: IContent) => typeFile.name);
 
   contents.forEach((content: INode) => {
     const thisFileOrDirShouldBeIgnore =

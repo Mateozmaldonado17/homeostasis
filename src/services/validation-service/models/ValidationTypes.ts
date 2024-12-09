@@ -20,6 +20,7 @@ interface IProcessFileCallback {
   conventionFormat?: ConventionList | string
   formatFiles: string[],
   removeIfFormatIsInvalid: boolean
+  executeHook: (hookName: string, ...args: any) => void
 }
 
 interface IProcessFileTypeProps {

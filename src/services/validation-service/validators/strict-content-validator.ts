@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import { SystemLogTypeEnum } from "../../../enums";
-import { IDescriptor, INode } from "../../../models";
 import IResponse from "../../../models/IResponse";
 import {
   DefaultBaseToRun,
@@ -17,6 +16,7 @@ const strictContentValidator = async (
   const { contentSettings, contents } = await extractDirectoryStructure(dest);
 
   const responses: IResponse[] = [];
+
   const configRunningBase = {
     fileType: DefaultBaseToRun, 
     contentSettings,
@@ -24,13 +24,14 @@ const strictContentValidator = async (
   };
 
   const processFileTypesCallback = (returnProps: IProcessFileCallback) => {
-    const { isDirectoryOrFile, currentType } = returnProps;
+    const { isDirectoryOrFile, currentType, executeHook } = returnProps;
 
     const processNodesProps: IProcessFileTypeProps = {
       contents,
       contentSettings,
       currentType,
     };
+
     const processNodesCallback = (filesProps: IProcessNodesCallback) => {
       const { content, fileNames, isStrictContent, purgeOnStrict } = filesProps;
       const fileIsNotExistAndIsStricContentMode =
@@ -53,6 +54,7 @@ const strictContentValidator = async (
           name: content.name,
         };
         responses.push(response);
+        executeHook("onPurgeOnStrict", filesProps);
       }
 
       if (fileIsNotExistAndIsStricContentMode && !purgeOnStrict) {
@@ -63,7 +65,9 @@ const strictContentValidator = async (
           name: content.name,
         };
         responses.push(response);
+        executeHook("onStrictContentValidation", filesProps);
       }
+
     };
     processNodes(processNodesProps, processNodesCallback);
   };

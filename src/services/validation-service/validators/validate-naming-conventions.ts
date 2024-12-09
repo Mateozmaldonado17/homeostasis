@@ -1,6 +1,7 @@
 const fs = require("fs").promises;
 const path = require("path");
 import { SystemLogTypeEnum } from "../../../enums";
+import { IContent } from "../../../models";
 import { ConventionList } from "../../../models/IDescriptor";
 import IResponse from "../../../models/IResponse";
 import { validateAndSuggestNamingConvention } from "../../../utils/string";
@@ -30,11 +31,12 @@ const validateNamingConventions = async (
       filteredMappedContent,
       conventionFormat,
       currentType,
+      executeHook
     } = returnProps;
 
     const staticContent = contentSettings?.[currentType].content;
     const autoFormatting = contentSettings?.[currentType].autoFormatting;
-    const fileNames = staticContent?.map((typeFile) => typeFile.name);
+    const fileNames = staticContent?.map((typeFile: IContent) => typeFile.name);
 
     fileNames?.forEach((fileName: string) => {
       const { isValid, suggestedName } = validateAndSuggestNamingConvention(
@@ -52,6 +54,7 @@ const validateNamingConventions = async (
           name: fileName,
         };
         responses.push(response);
+        executeHook("onInvalidConventionInDescriptor", returnProps);
       }
     });
 
@@ -76,6 +79,8 @@ const validateNamingConventions = async (
         const dir = path.dirname(content.fullDestination);
         const newPath = path.join(dir, suggestedName);
         await fs.rename(content.fullDestination, newPath);
+
+        executeHook("onAutoFormatting", returnProps);
       }
 
       if (!isValid && !autoFormatting) {
@@ -90,6 +95,7 @@ const validateNamingConventions = async (
           name,
         };
         responses.push(response);
+        executeHook("onInvalidConventionFilename", returnProps);
       }
     };
   });
