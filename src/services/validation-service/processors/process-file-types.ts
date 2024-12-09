@@ -1,10 +1,6 @@
 import { IContent, INode } from "../../../models";
 import { IBase, IProcessFileCallback } from "../models/ValidationTypes";
 
-const isNotIterable = (obj: any): boolean => {
-  return obj == null || typeof obj[Symbol.iterator] !== "function";
-}
-
 const processFileTypes = (
   props: IBase,
   callback: (returnProps: IProcessFileCallback) => void
@@ -15,16 +11,24 @@ const processFileTypes = (
   const plugins = contentSettings.plugins;
 
   const executeHook = (hookName: string, ...args: string[]) => {
-    if (isNotIterable(plugins)) return false;
+    const isNotIterable =
+      plugins == null || typeof plugins[Symbol.iterator] !== "function";
+    if (isNotIterable) return false;
     for (const plugin of plugins) {
       console.log(`${plugin.name}: ${hookName}`);
-      if (typeof plugin[hookName] !== "function") return false;
-      plugin[hookName](...args);
+      if (typeof plugin[hookName] === "function") {
+        plugin[hookName](...args);
+      } else {
+        console.warn(
+          `Hook "${hookName}" is not defined in plugins "${plugin.name}".`
+        );
+      }
     }
-  }
+  };
 
   fileType.forEach((currentType: string) => {
-    const conventionFormat = contentSettings?.[currentType].convention as string;
+    const conventionFormat = contentSettings?.[currentType]
+      .convention as string;
     const ignoredFiles = contentSettings?.[currentType].ignore;
 
     const descriptorContent: string[] | undefined = contentSettings?.[
@@ -33,7 +37,7 @@ const processFileTypes = (
 
     const isDirectoryOrFile =
       currentType === "directories" ? "directory" : "file";
-    
+
     const mappedContent = contents.map((content: INode) => {
       if (ignoredFiles?.includes(content.name)) {
         executeHook("onIgnore", content.name);
@@ -47,7 +51,7 @@ const processFileTypes = (
     const filteredMappedContent = mappedContent.filter(
       (value) => value !== undefined
     );
-    
+
     callback({
       ignoredFiles,
       currentType,
@@ -57,7 +61,7 @@ const processFileTypes = (
       conventionFormat,
       formatFiles,
       removeIfFormatIsInvalid,
-      executeHook
+      executeHook,
     });
   });
 };
